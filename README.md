@@ -1,10 +1,10 @@
-slam
+multi_ar
 ====
 
 - [Homepage](TODO)
-- [Gerrit](TODO)
-- [Documentation](TODO)
-- [Bugs](TODO)
+- [Repository (Github)](https://github.com/Smarre/multi_ar)
+- [Documentation](http://www.rubydoc.info/github/Smarre/multi_ar/master)
+- [Bugs (Github)](https://github.com/Smarre/multi_ar/issues)
 
 Description
 -----------
@@ -23,21 +23,21 @@ Synopsis
 
 With the executable:
 
-  # look what you can actually do
-  multi_ar --help
-  # list available databases for usage
-  multi_ar -l
-  # configure database
-  cp config/database.yaml.example config/database.yaml
-  vi config/database.yaml # change foo in foo_development to one of databases in multi_ar -l
-  # list rake tasks that the gem supports
-  multi_ar -T
-  # run migrations for all databases
-  multi_ar -t db:migrate
-  # read documentation of db:new_migration
-  multi_ar -t db:new_migration -d nya
-  # create new migration for database nya
-  multi_ar -t db:new_migration[NewMigraine] -d nya
+    # look what you can actually do
+    multi_ar --help
+    # list available databases for usage
+    multi_ar -l
+    # configure database
+    cp config/database.yaml.example config/database.yaml
+    vi config/database.yaml # change foo in foo_development to one of databases in multi_ar -l
+    # list rake tasks that the gem supports
+    multi_ar -T
+    # run migrations for all databases
+    multi_ar -t db:migrate
+    # read documentation of db:new_migration
+    multi_ar -t db:new_migration -d nya
+    # create new migration for database nya
+    multi_ar -t db:new_migration[NewMigraine] -d nya
 
 When using the API, MultiAR.new must be called before anything else.
 
@@ -62,7 +62,7 @@ These should eventually be fixed, feel free to open a pull request for these :-)
 Install
 -------
 
-  gem install multi_ar
+    gem install multi_ar
 
 Assuming you know where to install the gem from, of course...
 
@@ -71,12 +71,23 @@ The configuration options can be specified in config file. There is example conf
 Developers
 ----------
 
-  gem install bundler
-  bundle install
-  cucumber
-  # write new feature
-  cucumber
-  # rinse and repeat :-)
+    gem install bundler
+    bundle install
+    cucumber
+    # write new feature
+    cucumber
+    # rinse and repeat :-)
+
+Github
+------
+
+You can do pull requests at Github using the standard pattern :-)
+
+1. Fork it
+2. Create your feature branch (git checkout -b my-new-feature)
+3. Commit your changes (git commit -am 'Add some feature')
+4. Push to the branch (git push origin my-new-feature)
+5. Create new Pull Request
 
 License
 -------
@@ -104,6 +115,6 @@ CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-This gem is inspired by code of [active_record_migrations](://github.com/rosenfeld/active_record_migrations).
+This gem is inspired by code of [active_record_migrations](https://github.com/rosenfeld/active_record_migrations).
 
 
