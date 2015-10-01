@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.email       = "smar@smar.fi"
   s.files       = Dir.glob("lib/**/*.rb")
   s.executables = [ "multi_ar", "mar" ]
-  s.homepage    = "http://TODO"
+  s.homepage    = "http://smarre.github.io/multi_ar/"
   s.license     = "MIT"
   s.cert_chain  = ["certs/public.pem"]
   s.signing_key = "certs/private.pem"
