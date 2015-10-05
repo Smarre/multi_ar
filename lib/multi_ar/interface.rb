@@ -38,6 +38,9 @@ module MultiAR
     # Array of databases that will be used insted if none have not been passed through CLI.
     attr_accessor :databases
 
+    # If set to true, migration framework and other Rake related functionality will be enabled.
+    attr_accessor :migration_framework
+
     # Boolean of whether no arguments are needed
     attr_accessor :run_by_default
 
@@ -64,12 +67,24 @@ module MultiAR
       p.version @version if @version
       p.banner @description if @description
       p.opt "init",         "Create stub environment with configuration and database.yaml",           type: :string
-      p.opt "databases",    "Databases that will be enabled",                                         type: :strings if @options["databases"]
+      p.opt "databases",    "List of databases to perform operations",                                type: :strings if @options["databases"]
       p.opt "db_config",    "Path to database config file",                                           type: :string, default: "config/database.yaml" if @options["db_config"]
-      p.opt "config",       "Path to config file",                                                    type: :string, default: "config/settings.yaml" if @options["config"]
+      p.opt "config",       "Path to MultiAR framework config file",                                  type: :string, default: "config/settings.yaml" if @options["config"]
       p.opt "dry",          "Run the program without doing anything. Useful for debugging with -v",   type: :flag if @options["dry"]
-      p.opt "environment",  "Environment to run the alarms for",                                      type: :string, default: "development"
+      p.opt "environment",  "The environment to use. Corresponds to database config name " +
+            "(environment for foo_development is “development”).",                                    type: :string, default: "development"
       p.opt "verbose",      "Be verbose",                                                             type: :flag if @options["verbose"]
+
+      if @migration_framework == true
+        p.opt "all_rake_tasks",     "List all Rake tasks, not only commented ones",                 short: "A", type: :flag
+        # TODO: what for this is...?
+        #p.opt "common_migrations",  "Run the migrations bundled with the gem, for common databases.",           type: :flag,    default: true
+        # TODO: not implemented currently, do we really need this?
+        #p.opt "list_databases",     "Lists databases that contains migrations in the gem",                      type: :flag
+        p.opt "migration_dir",      "The directory where migrations for databases are read from",               type: :string,  default: "db/migrate"
+        p.opt "task",               "Rake task to execute",                                         short: "t", type: :string
+        p.opt "tasks",              "List available Rake tasks",                                    short: "T", type: :flag
+      end
 
       yield p if block_given?
 
@@ -85,15 +100,43 @@ module MultiAR
         result
       end
 
-      bootstrap opts if opts["init"]
+      bootstrap opts if opts["init"] # Bootstrap will exit after execution; in that case nothing after this will be run.
 
       raise "--config must be path to valid file" if @options["config"] and not File.exist? opts["config"]
       raise "config/database.yaml seems to be missing" if @options["db_config"] and not File.exist? opts["db_config"]
 
       @opts = opts
+
+      init_multi_ar
+
+      # Then run Rake tasks as requested
+
+      return if not @migration_framework # TODO: I think there should be much more fine grained control for this
+
+      if opts["tasks"] || opts["all_rake_tasks"]
+        @multi_ar.list_tasks all_rake_tasks: opts["all_rake_tasks"]
+        exit 1
+      end
+
+      if opts["task"].nil?
+        puts "Task must be specified. Check if you passed --task option."
+        exit 1
+      end
+
+      puts "Running task #{opts["task"]}" if opts["verbose"]
+      @multi_ar.rake_task opts["task"]
     end
 
     private
+
+    def init_multi_ar
+      @multi_ar = MultiAR::MultiAR.new common_migrations: @opts["common_migrations"],
+          config: @opts["config"],
+          databases: @opts["databases"],
+          db_config: @opts["db_config"],
+          environment: @opts["environment"],
+          migration_dir: @opts["migration_dir"]
+    end
 
     # @note This method will always quit the application or raise another exception for errors. Catch SystemExit if that’s not good for you.
     def bootstrap opts
