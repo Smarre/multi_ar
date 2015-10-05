@@ -49,16 +49,16 @@ module MultiAR
       ActiveRecord::Tasks::DatabaseTasks.class_eval { attr_accessor :sub_db_dir }
       ActiveRecord::Tasks::DatabaseTasks.sub_db_dir = databases.first # TODO: I don’t think this is how it should work
 
-      @rake = Rake::Application.new
-      Rake.application = @rake
+      @rake = ::Rake::Application.new
+      ::Rake.application = @rake
       @rake.init
-      Rake::TaskManager.record_task_metadata = true
+      ::Rake::TaskManager.record_task_metadata = true
 
-      RakeTasks.databases = databases
-      RakeTasks.environment = environment
-      RakeTasks.common_migrations = common_migrations
-      RakeTasks.migration_dir = migration_dir
-      RakeTasks.define
+      Rake::Tasks.databases = databases
+      Rake::Tasks.environment = environment
+      Rake::Tasks.common_migrations = common_migrations
+      Rake::Tasks.migration_dir = migration_dir
+      Rake::Tasks.define
 
       MultiAR.app = self
     end
