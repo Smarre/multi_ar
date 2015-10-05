@@ -1,6 +1,6 @@
 require "active_record"
 
-require_relative "multi_ar"
+require_relative "../multi_ar"
 
 module MultiAR
 
