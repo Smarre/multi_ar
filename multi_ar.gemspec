@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.authors     = ["Samu Voutilainen"]
   s.email       = "smar@smar.fi"
   s.files       = Dir.glob("lib/**/*.rb")
-  s.executables = [ "multi_ar", "mar" ]
+  s.executables = [ "multi_ar" ] # TODO: do we want executable like "mar"?
   s.homepage    = "http://smarre.github.io/multi_ar/"
   s.license     = "MIT"
   s.cert_chain  = ["certs/public.pem"]

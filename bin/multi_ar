@@ -1,65 +1,13 @@
 #!/usr/bin/env ruby
 
-require "trollop"
+require_relative "../lib/multi_ar/interface"
 
-require_relative "../lib/multi_ar"
 require_relative "../lib/multi_ar/version"
-require_relative "../lib/multi_ar/helper/rake_ext"
 
-# configuration
-
-p = Trollop::Parser.new do
-  version  "multi_ar-#{MultiAR::VERSION}"
-  banner <<-EOS
-  Helper utility to executing Rake tasks for ActiveRecord migrations.
-  EOS
-  opt "all_rake_tasks",     "List all Rake tasks, not only commented ones",                 short: "A", type: :flag
-  opt "common_migrations",  "Run the migrations bundled with the gem, for common databases.",           type: :flag,    default: true
-  opt "config",             "Location to configuration file of MultiAR.",                               type: :string,  default: "config/multi_ar.yaml"
-  opt "databases",          "List of databases to perform operations",                                  type: :strings
-  opt "db_config",          "Path to database config file",                                             type: :string,  default: "config/database.yaml"
-  opt "environment",        "The environment to use. Corresponds to database config name " +
-      "(environment for foo_development is “development”).",                                            type: :string,  default: "development"
-  # TODO: not implemented currently, do we really need this?
-  #opt "list_databases",     "Lists databases that contains migrations in the gem",                      type: :flag
-  opt "migration_dir",      "The directory where migrations for databases are read from",               type: :string,  default: "db/migrate"
-  opt "task",               "Rake task to execute",                                                     type: :string
-  opt "tasks",              "List available Rake tasks",                                    short: "T", type: :flag
-  opt "verbose",            "Be more verbose",                                                          type: :flag
+interface = MultiAR::Interface.new
+interface.version = "multi_ar-#{MultiAR::VERSION}"
+interface.description = "Multi database migration tools utilizing ActiveRecord"
+interface.migration_framework = true
+opts = interface.cli do |parser|
+  # Nya.
 end
-
-opts = Trollop::with_standard_exception_handling p do
-
-  args = ARGV.clone
-
-  # and then reparse with arguments from the config file (here so that Trollop can erase ARGV)
-  result = p.parse ARGV
-
-  # show help screen
-  raise Trollop::HelpNeeded if args.empty? # need to be different what we parse, as parser will remove used arguments
-
-  result
-end
-
-# running the task
-
-multi_ar = MultiAR::MultiAR.new common_migrations: opts["common_migrations"],
-    config: opts["config"],
-    databases: opts["databases"],
-    db_config: opts["db_config"],
-    environment: opts["environment"],
-    migration_dir: opts["migration_dir"]
-
-if opts["tasks"] || opts["all_rake_tasks"]
-  multi_ar.list_tasks all_rake_tasks: opts["all_rake_tasks"]
-  exit 1
-end
-
-if opts["task"].nil?
-  puts "Task must be specified. Check if you passed --task option."
-  exit 1
-end
-puts "Running task #{opts["task"]}" if opts["verbose"]
-multi_ar.rake_task opts["task"]
-
-#rake.top_level
