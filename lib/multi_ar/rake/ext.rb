@@ -1,6 +1,7 @@
 
 require "rake"
 
+# @api private
 # Extension to Rake to provide rename task.
 module Rake
   # Extension to Rake to provide rename task.

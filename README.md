@@ -18,30 +18,144 @@ Features
 - Standard production/development/test (or whatever you want) labels
 - CLI interface that allows fast creation of scripts using ActiveRecord models
 
-Synopsis
---------
+Installing
+----------
 
-With the executable:
+    gem install multi_ar
 
-    # look what you can actually do
+or with Bundler
+
+    # In Gemfile
+    gem "multi_ar"
+
+    # In shell
+    bundle install
+
+Using
+-----
+
+### With the executable
+
+    # Look what you can do
     multi_ar --help
-    # list available databases for usage
-    multi_ar -l
-    # configure database
-    cp config/database.yaml.example config/database.yaml
+    # Create your new project
+    mkdir shiny_new_project
+    cd shiny_new_project
+    # Initialize the project
+    multi_ar --init
+    # Configure databases
     vi config/database.yaml # change foo in foo_development to one of databases in multi_ar -l
-    # list rake tasks that the gem supports
+    # List rake tasks that the gem supports
     multi_ar -T
-    # run migrations for all databases
+    # Read documentation of db:new_migration
+    multi_ar -t db:new_migration -d my_database
+    # Create new migration for database my_database
+    multi_ar -t db:new_migration[NewMigraine] -d my_database
+    # Run migrations for all databases
     multi_ar -t db:migrate
-    # read documentation of db:new_migration
-    multi_ar -t db:new_migration -d nya
-    # create new migration for database nya
-    multi_ar -t db:new_migration[NewMigraine] -d nya
 
-When using the API, MultiAR.new must be called before anything else.
+### With the API
 
-TODO: example about using the API
+There is few different ways of using the API, by subclassing {MultiAR::MultiAR}, by using {MultiAR::MultiAR}
+directly and by implementing your own executable using {MultiAR::Interface}.
+
+#### Models
+
+Models works like standard ActiveRecord models, with exception that they should be inherited from your custom model.
+
+With multiple databases, you need to define connections in your models. For convenience, it’s usually good idea
+to do one model per database, where your connection details to that database resides.
+
+For example, if you have table named `my_new_models` in database `my_database`, you may want to save your model
+to path like `lib/my_database/my_new_model.rb`:
+
+    require_relative "../model"
+
+    module MyDatabase
+        class MyNewModel < MyDatabase::Model
+        end
+      end
+    end
+
+And then at `lib/my_database/model.rb` you’d have your custom model.rb:
+
+    require "multi_ar/model"
+
+    module MyDatabase
+      class Model < MultiAR::Model
+        # Needed so ActiveRecord can determine correct names
+        self.abstract_class = true
+
+        # Database identifier, for example for development environment, you’d have my_database_development:
+        # database settings block, as opposed to ActiveRecord’s standard development: block.
+        # Environment will be applied to the name automatically by MultiAR, as specified to MultiAR#new.
+        establish_connection "my_database"
+      end
+    end
+
+#### MultiAR object
+
+ActiveRecord models that uses MultiAR requires {MultiAR::MultiAR MultiAR} object initialized before the models will work. This object
+takes care of settings handling and saves information about all databases that has been used.
+
+    @multi_ar = MultiAR.new databases: [ "my_database" ], environment: "development"
+
+Afterwards, you can use your models as you’d use them with pure ActiveRecord:
+
+    require "my_new_model"
+    puts MyNewModel.count
+
+#### Subclassing
+
+For further customization, {MultiAR::MultiAR MultiAR} class can also be subclassed, which allows you to do ready deployment packages,
+and for example package them as a gem, which knows how to handle all your specific settings without any extra information
+from the user.
+
+    require "multi_ar"
+
+    module MyApplication
+      # Wrapper over MultiAR’s base class
+      class MyMultiAR < MultiAR::MultiAR
+        add_migration_dir "my_db_migrate/dir"
+      end
+    end
+
+#### MultiAR::Interface
+
+MultiAR can be used with {http://www.sinatrarb.com/ Sinatra}, for example, without any real extra trouble. If you wish to launch
+{http://www.sinatrarb.com/ Sinatra} as executable (by `ruby yourservice.rb` or `./yourservice` for example),
+it may make sense to use {MultiAR::Interface MultiAR’s CLI interface support} instead:
+
+    # This example executable resides in bin/yourservice
+
+    require "multi_ar/interface"
+
+    require_relative "../lib/yourservice/version"
+
+    interface = MultiAR::Interface.new
+    interface.version = "yourservice-#{Yourservice::VERSION}"
+    interface.description = "My totally useful utility no-one can live without."
+    # interface.migration_framework = true # Enables Rake tasks for migration generation; not needed unless you plan to generate migrations with this executable
+    interface.options["databases"] = true
+    opts = interface.cli do |parser|
+      # You can add your custom Trollop options here
+      parser.opt :port, "Port where to bind Sinatra", default: "9999", type: :string
+    end
+
+    # MultiAR will be initialized by `MultiAR::Interface`, so now you can just run your program as you want
+
+    raise "Invalid port" if opts["port"] != 10001
+
+    require 'sinatra'
+
+    get '/hi' do
+      "Hello World!"
+    end
+
+Then you can just run your application:
+
+    $ bundle exec ruby bin/yourservice.rb
+
 
 Requirements
 ------------
@@ -53,15 +167,8 @@ Known problems
 
 - `db:new_migration` Rake task does not adhere migration_dirs parameters, it always creates migrations to db/migrate/database_name
 - There is no tests
+- Currently pulls whole Rails, not only the parts MultiAR requires
 
-Install
--------
-
-    gem install multi_ar
-
-Assuming you know where to install the gem from, of course...
-
-The configuration options can be specified in config file. There is example config in gem’s
 
 Developers
 ----------

@@ -5,6 +5,7 @@ require_relative "multi_ar/rake/tasks"
 
 require_relative "multi_ar/database"
 
+# Main module.
 module MultiAR
 
   # Base of MultiAR gem.
@@ -16,7 +17,7 @@ module MultiAR
     attr_reader :db_config
     attr_reader :environment
 
-    # :nodoc:
+    # @api private
     # This will always be overridden, when MultiAR is initialized. Don’t try to do any funny logic with this.
     @@migration_dirs = []
 

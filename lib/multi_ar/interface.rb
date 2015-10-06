@@ -9,11 +9,6 @@ module MultiAR
 
   # An utility to ease creation of executable using multi database ActiveRecord
   # through command line interface.
-  #
-  # Usage:
-  #
-  # TODO: write usage
-  # TODO: mention this usage in README.md too
   class Interface
 
     # Options that will be enabled.
@@ -51,7 +46,7 @@ module MultiAR
     #
     # This is used in --init.
     #
-    # TODO: what for this actually is? Write an example or just tell what for this should be used.
+    # @todo what for this actually is? Write an example or just tell what for this should be used.
     attr_accessor :dependencies
 
     def initialize
@@ -61,7 +56,7 @@ module MultiAR
     end
 
     # @note Consumes ARGV, create copy of it if you need it for something.
-    # TODO: hardcode shorthands
+    # @todo hardcode shorthands
     def cli
       p = Trollop::Parser.new
       p.version @version if @version

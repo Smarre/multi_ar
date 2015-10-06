@@ -11,6 +11,9 @@ require "erb"
 require "yaml"
 
 module MultiAR
+
+  # @api private
+  # Database functionality class.
   class Database
 
     # @todo test if this @@initialized thingy actually works, I’m not sure how it in practice works

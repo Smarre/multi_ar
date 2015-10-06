@@ -9,6 +9,7 @@ require "active_record/tasks/database_tasks"
 
 require_relative "migration_generator"
 
+# @api private
 module Rake
 
   # Utility that defines Rake tasks of MultiAR

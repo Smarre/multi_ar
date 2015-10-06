@@ -2,6 +2,8 @@
 require "rails/generators/active_record/migration/migration_generator"
 require "active_record/tasks/database_tasks"
 
+
+# @api private
 module ActiveRecordMigrations
   module Generators
     class MigrationGenerator < ::ActiveRecord::Generators::MigrationGenerator
