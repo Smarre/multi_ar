@@ -52,6 +52,7 @@ Known problems
 --------------
 
 - `db:new_migration` Rake task does not adhere migration_dirs parameters, it always creates migrations to db/migrate/database_name
+- There is no tests
 
 Install
 -------
