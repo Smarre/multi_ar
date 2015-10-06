@@ -51,13 +51,7 @@ Requirements
 Known problems
 --------------
 
-TODO: I don’t think info is actually correct, but I need to figure out common causes of that and document it, I guess.
-ActiveRecord may give an error like `No connection pool for Foo::Bar::Model (ActiveRecord::ConnectionNotEstablished)`
-in case there is no available connection. This means you need to pass database YAML file which contains this database
-with `--db-config`, in slam’s configuration file with key db_config or with `MultiAR.initialize(db_config: "")`.
-Also note that environment affects to this.
-
-These should eventually be fixed, feel free to open a pull request for these :-)
+- `db:new_migration` Rake task does not adhere migration_dirs parameters, it always creates migrations to db/migrate/database_name
 
 Install
 -------
