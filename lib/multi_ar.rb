@@ -29,7 +29,7 @@ module MultiAR
     def initialize databases:, environment: "development", config: "config/multi_ar.yaml", db_config: "config/database.yaml"
 
       # first load config
-      if File.exist? config
+      if not config.nil? and File.exist? config
         require "psych"
         config = Psych.load_file config
         b = binding
@@ -39,7 +39,7 @@ module MultiAR
       end
 
       # then check that we have data in format we want it to be
-      raise "#{db_config} is not valid path to a file. Try specifying --db-config <path> or configuring it in the configuration file." unless File.exist?(db_config)
+      raise "#{db_config} is not valid path to a file. Try specifying --db-config <path> or configuring it in the configuration file." if db_config.nil? or !File.exist?(db_config)
       raise "databases is not responding to :each. Try passing passing --databases <database> or configuring it in the configuration file." unless databases.respond_to? :each
 
       @databases = databases
