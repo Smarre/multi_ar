@@ -130,7 +130,7 @@ module MultiAR
     private
 
     def init_multi_ar
-      @multi_ar = MultiAR::MultiAR.new common_migrations: @opts["common_migrations"],
+      @multi_ar = MultiAR.new common_migrations: @opts["common_migrations"],
           config: @opts["config"],
           databases: @opts["databases"],
           db_config: @opts["db_config"],
