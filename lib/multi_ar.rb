@@ -26,7 +26,7 @@ module MultiAR
 
     # @param databases array of available databases
     # @todo config file is overriding parameters passed here... I think it should be other way around, but need more custom logic for that :/
-    def initialize databases:, environment: "development", config: "config/multi_ar.yaml", db_config: "config/database.yaml", common_migrations: true
+    def initialize databases:, environment: "development", config: "config/multi_ar.yaml", db_config: "config/database.yaml"
 
       # first load config
       if File.exist? config
@@ -58,7 +58,6 @@ module MultiAR
 
       Rake::Tasks.databases = databases
       Rake::Tasks.environment = environment
-      Rake::Tasks.common_migrations = common_migrations
       Rake::Tasks.define
 
       MultiAR.app = self
