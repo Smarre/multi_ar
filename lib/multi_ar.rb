@@ -7,14 +7,16 @@ require_relative "multi_ar/database"
 
 module MultiAR
 
-  # Base of Slam gem.
+  # Base of MultiAR gem.
   #
-  # Must be initialized before most actions works, that relies on Slam#app for getting configuration.
+  # Must be initialized before most actions works, that relies on MultiAR#app for getting configuration.
   class MultiAR
 
     attr_reader :databases
     attr_reader :db_config
     attr_reader :environment
+
+    @@migration_dirs = []
 
     class << self
       # Instance of MultiAR::MultiAR, automatically assigned by MultiAR::MultiAR#new.
@@ -24,7 +26,7 @@ module MultiAR
 
     # @param databases array of available databases
     # @todo config file is overriding parameters passed here... I think it should be other way around, but need more custom logic for that :/
-    def initialize databases:, environment: "development", config: "config/multi_ar.yaml", db_config: "config/database.yaml", common_migrations: true, migration_dir: "db/migrate"
+    def initialize databases:, environment: "development", config: "config/multi_ar.yaml", db_config: "config/database.yaml", common_migrations: true
 
       # first load config
       if File.exist? config
@@ -44,7 +46,7 @@ module MultiAR
       @db_config = db_config
       @environment = environment
 
-      Database.initialize db_config: db_config, migration_dir: migration_dir
+      Database.initialize db_config: db_config
 
       ActiveRecord::Tasks::DatabaseTasks.class_eval { attr_accessor :sub_db_dir }
       ActiveRecord::Tasks::DatabaseTasks.sub_db_dir = databases.first # TODO: I don’t think this is how it should work
@@ -57,10 +59,29 @@ module MultiAR
       Rake::Tasks.databases = databases
       Rake::Tasks.environment = environment
       Rake::Tasks.common_migrations = common_migrations
-      Rake::Tasks.migration_dir = migration_dir
       Rake::Tasks.define
 
       MultiAR.app = self
+    end
+
+    # Array of paths to directories where migrations resides.
+    # @see add_migration_dir
+    def self.migration_dirs
+      return @@migration_dirs
+    end
+
+    # Add a path to a directory where migrations resides. For standard Rails setup, this would be “db/migrate”.
+    #
+    # The directory structure of how MultiAR uses the path is a bit different from traditional way: for each
+    # database, there is directory inside the migration dir.
+    #
+    # For example, if project uses database named “messy_database” and migration dir is “my/migration/dir”,
+    # migrations would be looked from path “my/migration/dir/messy_database”.
+    #
+    # @note often you want to add full path to this dir, `__dir__` is useful for this.
+    def self.add_migration_dir path
+      raise "Migration dir #{path} does not exist." unless Dir.exist? path
+      @@migration_dirs << path
     end
 
     # @todo this shows rake in start of the command, we want to show multi_ar instead.
@@ -71,6 +92,7 @@ module MultiAR
       @rake.display_tasks_and_comments
     end
 
+    # Invokes Rake task from `task_name`
     def rake_task task_name
       @rake.invoke_task task_name
     end

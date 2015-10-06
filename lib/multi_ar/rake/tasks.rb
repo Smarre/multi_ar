@@ -84,7 +84,7 @@ module Rake
         establish_connection database_name
 
         MultiAR::MultiAR.migration_dirs.each do |dir|
-          path = "#{migration_dir}/#{database_name}/"
+          path = "#{dir}/#{database_name}/"
           # The database should be present only on one migration dir, so this will fail if there is more than one migration dir
           ActiveRecord::Migrator.migrate path if Dir.exist? path
         end
@@ -99,7 +99,7 @@ module Rake
         establish_connection database_name
         step = ENV['STEP'] ? ENV['STEP'].to_i : 1
         MultiAR::MultiAR.migration_dirs.each do |dir|
-          path = "#{migration_dir}/#{database_name}/"
+          path = "#{dir}/#{database_name}/"
           # The database should be present only on one migration dir, so this will fail if there is more than one migration dir
           ActiveRecord::Migrator.rollback(path, step) if Dir.exist? path
         end
