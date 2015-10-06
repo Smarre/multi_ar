@@ -132,9 +132,8 @@ module MultiAR
       @multi_ar = MultiAR.new config: @opts["config"],
           databases: @opts["databases"],
           db_config: @opts["db_config"],
-          environment: @opts["environment"]
-
-      MultiAR.add_migration_dir @opts["migration_dir"]
+          environment: @opts["environment"],
+          migration_dirs: [ @opts["migration_dir"] ]
     end
 
     # @note This method will always quit the application or raise another exception for errors. Catch SystemExit if that’s not good for you.
