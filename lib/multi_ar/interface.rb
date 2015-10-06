@@ -77,10 +77,9 @@ module MultiAR
 
       if @migration_framework == true
         p.opt "all_rake_tasks",     "List all Rake tasks, not only commented ones",                 short: "A", type: :flag
-        # TODO: what for this is...?
-        #p.opt "common_migrations",  "Run the migrations bundled with the gem, for common databases.",           type: :flag,    default: true
         # TODO: not implemented currently, do we really need this?
         #p.opt "list_databases",     "Lists databases that contains migrations in the gem",                      type: :flag
+        # TODO: should we do migration_dirs here too instead?
         p.opt "migration_dir",      "The directory where migrations for databases are read from",               type: :string,  default: "db/migrate"
         p.opt "task",               "Rake task to execute",                                         short: "t", type: :string
         p.opt "tasks",              "List available Rake tasks",                                    short: "T", type: :flag
@@ -130,12 +129,12 @@ module MultiAR
     private
 
     def init_multi_ar
-      @multi_ar = MultiAR.new common_migrations: @opts["common_migrations"],
-          config: @opts["config"],
+      @multi_ar = MultiAR.new config: @opts["config"],
           databases: @opts["databases"],
           db_config: @opts["db_config"],
-          environment: @opts["environment"],
-          migration_dir: @opts["migration_dir"]
+          environment: @opts["environment"]
+
+      MultiAR.add_migration_dir @opts["migration_dir"]
     end
 
     # @note This method will always quit the application or raise another exception for errors. Catch SystemExit if that’s not good for you.
