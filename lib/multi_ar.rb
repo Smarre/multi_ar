@@ -48,7 +48,7 @@ module MultiAR
       @databases = databases
       @db_config = db_config
       @environment = environment
-      @@migration_dirs = migration_dirs
+      @@migration_dirs = migration_dirs unless migration_dirs.empty? # This takes care of that it will only be overridden if there is any given values, making default configs work
 
       Database.initialize db_config: db_config
 
