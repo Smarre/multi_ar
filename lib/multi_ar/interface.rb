@@ -110,7 +110,7 @@ module MultiAR
 
       # Then run Rake tasks as requested
 
-      return if not @migration_framework # TODO: I think there should be much more fine grained control for this
+      return opts if not @migration_framework # TODO: I think there should be much more fine grained control for this
 
       if opts["tasks"] || opts["all_rake_tasks"]
         @multi_ar.list_tasks all_rake_tasks: opts["all_rake_tasks"]
