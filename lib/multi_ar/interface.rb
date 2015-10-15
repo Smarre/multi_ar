@@ -21,7 +21,9 @@ module MultiAR
     # - verbose
     # - databases
     #
-    # environment is enabled by default, rest are disabled.
+    # If value is `true`, an option will be added to CLI interface. If the value is string, the option will be populated by this value instead.
+    #
+    # `environment` option is enabled by default, rest are disabled.
     attr_accessor :options
 
     # Version shown with --version flag on CLI
@@ -62,13 +64,13 @@ module MultiAR
       p.version @version if @version
       p.banner @description if @description
       p.opt "init",         "Create stub environment with configuration and database.yaml",           type: :string
-      p.opt "databases",    "List of databases to perform operations",                                type: :strings if @options["databases"]
-      p.opt "db_config",    "Path to database config file",                                           type: :string, default: "config/database.yaml" if @options["db_config"]
-      p.opt "config",       "Path to MultiAR framework config file",                                  type: :string, default: "config/settings.yaml" if @options["config"]
-      p.opt "dry",          "Run the program without doing anything. Useful for debugging with -v",   type: :flag if @options["dry"]
+      p.opt "databases",    "List of databases to perform operations",                                type: :strings if @options["databases"] == true
+      p.opt "db_config",    "Path to database config file",                                           type: :string, default: "config/database.yaml" if @options["db_config"] == true
+      p.opt "config",       "Path to MultiAR framework config file",                                  type: :string, default: "config/settings.yaml" if @options["config"] == true
+      p.opt "dry",          "Run the program without doing anything. Useful for debugging with -v",   type: :flag if @options["dry"] == true
       p.opt "environment",  "The environment to use. Corresponds to database config name " +
             "(environment for foo_development is “development”).",                                    type: :string, default: "development"
-      p.opt "verbose",      "Be verbose",                                                             type: :flag if @options["verbose"]
+      p.opt "verbose",      "Be verbose",                                                             type: :flag if @options["verbose"] == true
 
       if @migration_framework == true
         p.opt "all_rake_tasks",     "List all Rake tasks, not only commented ones",                 short: "A", type: :flag
@@ -92,6 +94,12 @@ module MultiAR
         end
 
         result
+      end
+
+      @options.each do |key, value|
+        next if value == true
+        # Not bothering to do checks as we just take the intended values, and not looping the array otherwise
+        opts[key] = value
       end
 
       bootstrap opts if opts["init"] # Bootstrap will exit after execution; in that case nothing after this will be run.
