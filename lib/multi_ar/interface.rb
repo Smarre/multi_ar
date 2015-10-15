@@ -14,14 +14,14 @@ module MultiAR
     # Options that will be enabled.
     #
     # Options supported by this system are:
-    # - config
-    # - db_config
-    # - dry
-    # - environment
-    # - verbose
-    # - databases
+    # - config      # `true` or `String`
+    # - db_config   # `true` or `String`
+    # - dry         # boolean
+    # - environment # `true` or `String`
+    # - verbose     # boolean
+    # - databases   # `true` or `Array`
     #
-    # If value is `true`, an option will be added to CLI interface. If the value is string, the option will be populated by this value instead.
+    # If value is `true`, an option will be added to CLI interface. If the value is something else, the option will be populated by this value instead.
     #
     # `environment` option is enabled by default, rest are disabled.
     attr_accessor :options
@@ -31,9 +31,6 @@ module MultiAR
 
     # Description of the application show in usage texts on CLI
     attr_accessor :description
-
-    # Array of databases that will be used insted if none have not been passed through CLI.
-    attr_accessor :databases
 
     # If set to true, migration framework and other Rake related functionality will be enabled.
     attr_accessor :migration_framework
@@ -105,7 +102,7 @@ module MultiAR
       bootstrap opts if opts["init"] # Bootstrap will exit after execution; in that case nothing after this will be run.
 
       raise "--config must be path to valid file" if @options["config"] and not File.exist? opts["config"]
-      raise "config/database.yaml seems to be missing" if @options["db_config"] and not File.exist? opts["db_config"]
+      raise "Database config #{opts["db_config"]} seems to be missing" if @options["db_config"] and not File.exist? opts["db_config"]
 
       @opts = opts
 
@@ -141,7 +138,6 @@ module MultiAR
 
     # @note This method will always quit the application or raise another exception for errors. Catch SystemExit if that’s not good for you.
     def bootstrap opts
-      opts["databases"] ||= @databases
       raise "--databases must be given when bootstrapping." unless opts["databases"]
       raise "#{opts["init"]} already exists" if File.exist? opts["init"]
 
