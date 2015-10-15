@@ -1,5 +1,10 @@
 = Changelog
 
-== 1.0.0 / 2015-XX-XX
+== 1.0.1 / 2015-XX-XX
+
+* Allow usage of add_migration_dir before initializing the object (Samu Voutilainen)
+* Bug fixes to migration dir handling (Samu Voutilainen)
+
+== 1.0.0 / 2015-10-06
 
 * First public release. (Samu Voutilainen)
