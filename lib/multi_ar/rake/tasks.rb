@@ -9,6 +9,12 @@ require "active_record/tasks/database_tasks"
 
 require_relative "migration_generator"
 
+# Optionally support migration_comments
+begin
+  require "migration_comments"
+rescue LoadError
+end
+
 # @api private
 module Rake
 

@@ -21,6 +21,6 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency "rails", "~> 4"
   s.add_runtime_dependency "railties", "~> 4"
   s.add_runtime_dependency "rake", "~> 10.4", ">= 10.4.2"
-  s.add_runtime_dependency "migration_comments", "~> 0.3.2"
+  #s.add_runtime_dependency "migration_comments", "~> 0.3.2"
   s.add_runtime_dependency "safe_attributes", "~> 1.0"
 end
