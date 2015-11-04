@@ -182,7 +182,7 @@ module MultiAR
 
     def bootstrap_gemfile
       str = <<-EOS.gsub(/^ {6}/, "")
-      source "http://service.slm.fi:9292/"
+      source "https://rubygems.org/"
 
       gem "#{script_name}"
       EOS
