@@ -14,12 +14,13 @@ module MultiAR
     # Options that will be enabled.
     #
     # Options supported by this system are:
-    # - config      # `true` or `String`
-    # - db_config   # `true` or `String`
-    # - dry         # boolean
-    # - environment # `true` or `String`
-    # - verbose     # boolean
-    # - databases   # `true` or `Array`
+    # - config        # `true` or `String`
+    # - db_config     # `true` or `String`
+    # - dry           # boolean
+    # - environment   # `true` or `String`
+    # - verbose       # boolean
+    # - databases     # `true` or `Array`
+    # - migration_dir # String
     #
     # If value is `true`, an option will be added to CLI interface. If the value is something else, the option will be populated by this value instead.
     #
