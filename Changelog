@@ -1,6 +1,10 @@
 = Changelog
 
-== 1.1.0 / 2015-01-15
+== 1.1.1 / 2015-11-17
+
+* Optional support for migration_comments gem. (Samu Voutilainen)
+
+== 1.1.0 / 2015-10-15
 
 * Allow usage of add_migration_dir before initializing the object (Samu Voutilainen)
 * Bug fixes to migration dir handling (Samu Voutilainen)
