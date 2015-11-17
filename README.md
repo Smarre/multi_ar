@@ -11,6 +11,9 @@ Description
 
 Multi database support for ActiveRecord 4 with migration support.
 
+Our documentation uses [YARD](http://yardoc.org), you may want to see [the generated
+documentation](http://www.rubydoc.info/github/Smarre/multi_ar/master) instead.
+
 Features
 -----------------
 
@@ -21,38 +24,43 @@ Features
 Installing
 ----------
 
-    gem install multi_ar
+    $ gem install multi_ar
 
 or with Bundler
 
     # In Gemfile
     gem "multi_ar"
 
-    # In shell
-    bundle install
+and then install the bundle:
+
+```shell
+$ bundle install
+```
 
 Using
 -----
 
 ### With the executable
 
-    # Look what you can do
-    multi_ar --help
-    # Create your new project
-    mkdir shiny_new_project
-    cd shiny_new_project
-    # Initialize the project
-    multi_ar --init
-    # Configure databases
-    vi config/database.yaml # change foo in foo_development to one of databases in multi_ar -l
-    # List rake tasks that the gem supports
-    multi_ar -T
-    # Read documentation of db:new_migration
-    multi_ar -t db:new_migration -d my_database
-    # Create new migration for database my_database
-    multi_ar -t db:new_migration[NewMigraine] -d my_database
-    # Run migrations for all databases
-    multi_ar -t db:migrate
+```shell
+# Look what you can do
+$ multi_ar --help
+# Create your new project
+$ mkdir shiny_new_project
+$ cd shiny_new_project
+# Initialize the project
+$ multi_ar --init
+# Configure databases
+$ vi config/database.yaml # change foo in foo_development to one of databases in multi_ar -l
+# List rake tasks that the gem supports
+$ multi_ar -T
+# Read documentation of db:new_migration
+$ multi_ar -t db:new_migration -d my_database
+# Create new migration for database my_database
+$ multi_ar -t db:new_migration[NewMigraine] -d my_database
+# Run migrations for all databases
+$ multi_ar -t db:migrate
+```
 
 ### With the API
 
@@ -72,12 +80,11 @@ to path like `lib/my_database/my_new_model.rb`:
     require_relative "../model"
 
     module MyDatabase
-        class MyNewModel < MyDatabase::Model
-        end
+      class MyNewModel < MyDatabase::Model
       end
     end
 
-And then at `lib/my_database/model.rb` you’d have your custom model.rb:
+And then at `lib/my_database/model.rb` you’d have your custom `model.rb`:
 
     require "multi_ar/model"
 
@@ -173,11 +180,11 @@ Known problems
 Developers
 ----------
 
-    gem install bundler
-    bundle install
-    cucumber
+    $ gem install bundler
+    $ bundle install
+    $ cucumber
     # write new feature
-    cucumber
+    $ cucumber
     # rinse and repeat :-)
 
 Github
