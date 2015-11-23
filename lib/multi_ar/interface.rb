@@ -102,7 +102,7 @@ module MultiAR
 
       bootstrap opts if opts["init"] # Bootstrap will exit after execution; in that case nothing after this will be run.
 
-      raise "--config must be path to valid file" if @options["config"] and not File.exist? opts["config"]
+      raise "--config must be path to valid file" if opts[:config_given] and not File.exist? opts["config"]
       raise "Database config #{opts["db_config"]} seems to be missing" if @options["db_config"] and not File.exist? opts["db_config"]
 
       @opts = opts
