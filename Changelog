@@ -1,5 +1,9 @@
 = Changelog
 
+== 1.1.2 / 2015-11-23
+
+* Made MultiAR::Interface not to fail to missing default config file (Samu Voutilainen)
+
 == 1.1.1 / 2015-11-17
 
 * Optional support for migration_comments gem. (Samu Voutilainen)
