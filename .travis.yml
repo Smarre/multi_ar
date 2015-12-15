@@ -5,4 +5,4 @@ rvm:
 
 script: bundle exec cucumber
 
-sudo: false
+sudo: required
