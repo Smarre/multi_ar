@@ -12,7 +12,7 @@ module ActiveRecordMigrations
       def create_migration_file
         set_local_assigns!
         validate_file_name!
-        dir = ::ActiveRecord::Tasks::DatabaseTasks.migrations_paths.first
+        dir = ::ActiveRecord::Tasks::DatabaseTasks.migration_dir
         db_dir = ::ActiveRecord::Tasks::DatabaseTasks.sub_db_dir
         migration_template @migration_template, "#{dir}/#{db_dir}/#{file_name}.rb"
       end

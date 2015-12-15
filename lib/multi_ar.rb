@@ -52,8 +52,9 @@ module MultiAR
 
       Database.initialize db_config: db_config
 
-      ActiveRecord::Tasks::DatabaseTasks.class_eval { attr_accessor :sub_db_dir }
+      ActiveRecord::Tasks::DatabaseTasks.class_eval { attr_accessor :sub_db_dir, :migration_dir }
       ActiveRecord::Tasks::DatabaseTasks.sub_db_dir = databases.first # TODO: I don’t think this is how it should work
+      ActiveRecord::Tasks::DatabaseTasks.migration_dir = migration_dirs.first # TODO: I don’t think this is how it should work
 
       @rake = ::Rake::Application.new
       ::Rake.application = @rake

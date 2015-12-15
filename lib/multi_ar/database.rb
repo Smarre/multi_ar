@@ -26,7 +26,6 @@ module MultiAR
       include ActiveRecord::Tasks
 
       ActiveRecord::Base.configurations = ::ActiveRecord::Tasks::DatabaseTasks.database_configuration = db_config_data
-      ActiveRecord::Tasks::DatabaseTasks.migrations_paths = [ migration_dir ] # this is only used by db:new_migration rake task. # TODO: because of that, maybe we want to handle this differently?
       @@initialized = true
     end
 
