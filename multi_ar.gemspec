@@ -25,5 +25,5 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency "safe_attributes", "~> 1.0"
 
   s.add_development_dependency "redcarpet", "~> 3.3"
-  s.add_development_dependency "github-markdown", "~> 1.4"
+  s.add_development_dependency "github-markup", "~> 1.4"
 end
