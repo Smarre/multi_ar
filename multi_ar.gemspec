@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   s.homepage    = "http://smarre.github.io/multi_ar/"
   s.license     = "MIT"
   s.cert_chain  = ["certs/public.pem"]
-  s.signing_key = "certs/private.pem"
+  s.signing_key = "certs/private.pem" if $0 =~ /gem\z/
   s.add_runtime_dependency "trollop", "~> 2.1"
   s.add_runtime_dependency "activerecord", "~> 4"
   s.add_runtime_dependency "rails", "~> 4"
