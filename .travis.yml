@@ -5,7 +5,5 @@ rvm:
 
 script: bundle exec cucumber
 
-sudo: required
-
 before_install:
     - gem update bundler
