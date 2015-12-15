@@ -9,10 +9,11 @@ multi_ar
 Description
 -----------
 
-Multi database support for ActiveRecord 4 with migration support.
+Allows you to use multiple databases with [ActiveRecord 4](https://rubygems.org/gems/activerecord), with
+optional support for Rails’s migration generator (`rails generate migration ..`).
 
 Our documentation uses [YARD](http://yardoc.org), you may want to see [the generated
-documentation](http://www.rubydoc.info/github/Smarre/multi_ar/master) instead.
+documentation](http://www.rubydoc.info/github/Smarre/multi_ar/master) instead of Github README.
 
 Features
 -----------------
@@ -175,6 +176,7 @@ Known problems
 - `db:new_migration` Rake task does not adhere migration_dirs parameters, it always creates migrations to db/migrate/database_name
 - There is no tests
 - Currently pulls whole Rails, not only the parts MultiAR requires
+- May or may not work with Rails, please report if you test it
 
 
 Developers
