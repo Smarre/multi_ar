@@ -21,6 +21,8 @@ Features
 - Streamlined way of using multiple databases with ActiveRecord
 - Standard production/development/test (or whatever you want) labels
 - CLI interface that allows fast creation of scripts using ActiveRecord models
+- Works across different ActiveRecord versions; instead of using private, version dependent API,
+  internal parts have been implemented in this project.
 
 Installing
 ----------
