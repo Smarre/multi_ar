@@ -6,6 +6,8 @@ require_relative "../../lib/multi_ar"
 databases = [ "testdb" ]
 $multi_ar = MultiAR::MultiAR.new databases: databases, environment: "test", db_config: "config/database.yaml", migration_dirs: [ "tmp" ]
 
+$multi_ar.rake_task "db:create"
+
 # Then we can declare models
 
 require_relative "../../lib/multi_ar/model"
