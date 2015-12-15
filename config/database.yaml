@@ -1,0 +1,9 @@
+
+# Database configuration used by tests
+
+testdb_test:
+    adapter: sqlite3
+    database: /tmp/testdb.sqlite3
+    pool: 5
+    timeout: 5000
+
