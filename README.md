@@ -170,7 +170,7 @@ Then you can just run your application:
 Requirements
 ------------
 
-* Ruby 2.1 or greater (tested with 2.1 and 2.2; may work with earlier version but no guarantees)
+* Ruby 2.1 or greater
 
 Known problems
 --------------
