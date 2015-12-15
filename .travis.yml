@@ -5,3 +5,5 @@ rvm:
 - "2.2"
 
 script: bundle exec cucumber
+
+sudo: false
