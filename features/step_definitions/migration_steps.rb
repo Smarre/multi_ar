@@ -7,8 +7,7 @@ end
 
 When(/^I generate migration to add column "([^"]*)" to table "([^"]*)"$/) do |column, table|
   $multi_ar.rake_task "db:new_migration[AddNewColumnToTable]"
-  filename = Dir.glob("/tmp/testdb/*_add_new_column_to_table.rb").first
-  #filename = "/tmp/testdb/migrationfile"
+  filename = Dir.glob("tmp/testdb/*_add_new_column_to_table.rb").first
   content = File.read filename
   new_content = content.gsub /def change\n/, "def change\n    add_column '#{table}', '#{column}', :string\n"
   File.open(filename, "w") do |file|
