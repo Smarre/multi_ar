@@ -20,6 +20,7 @@ When(/^I run migrations$/) do
 end
 
 Then(/^table "([^"]*)" should contain column "([^"]*)"$/) do |table, column|
+  TestTable.reset_column_information
   expect(TestTable.column_names).to contain_exactly( "funkyvalue", column )
 end
 
