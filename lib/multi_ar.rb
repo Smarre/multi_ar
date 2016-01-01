@@ -29,7 +29,7 @@ module MultiAR
 
     # @param databases array of available databases
     # @todo config file is overriding parameters passed here... I think it should be other way around, but need more custom logic for that :/
-    def initialize databases:, environment: "development", config: "config/multi_ar.yaml", db_config: "config/database.yaml", migration_dirs: []
+    def initialize databases:, environment: "development", config: "config/settings.yaml", db_config: "config/database.yaml", migration_dirs: []
 
       # first load config
       if not config.nil? and File.exist? config
