@@ -3,6 +3,8 @@
 == 2.0.0 / 2016-XX-XX
 
 * multi_ar --init was modified to support bootstrapping existing projects. (Samu Voutilainen)
+* Changed some defaults to make more sense. (Samu Voutilainen)
+* Miscelleanous bugfixes (Samu Voutilainen)
 
 == 1.1.2 / 2015-11-23
 
