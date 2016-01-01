@@ -1,5 +1,6 @@
 
 require "fileutils"
+require "pathname"
 require "trollop"
 
 require_relative "../multi_ar"
@@ -158,7 +159,7 @@ module MultiAR
         File.write "README.md", bootstrap_readme(opts) unless File.exist?("README.md")
         bootstrap_gemfile
 
-        FileUtils.mkdir config_dir
+        FileUtils.mkdir config_dir unless Dir.exist? config_dir
         Dir.chdir config_dir do
           File.write database_config, bootstrap_db_config(opts) unless File.exist?(database_config)
         end
@@ -192,7 +193,7 @@ module MultiAR
       str = <<-EOS.gsub(/^ {6}/, "")
       source "https://rubygems.org/"
 
-      gem "#{script_name}"
+      gem "multi_ar"
       EOS
 
       @dependencies.each do |dep, version|
@@ -219,7 +220,7 @@ module MultiAR
       str = <<-EOS.gsub(/^ {6}/, "")
       ## #{script_name}
 
-      This is scaffolded runtime directory for project #{script_name}, created by cimmgnd #{script_name} --init #{opts["init"]}.
+      This is scaffolded runtime directory for project #{project_name}, created by command #{script_name} --init #{opts["init"]}.
 
       Purpose of this scaffold is to ease usage of this #{script_name}, by providing sample configuration and ready
       bundle just ready for running. Default configuration is for SQLite3, but any databases supported
@@ -229,8 +230,10 @@ module MultiAR
 
           bundle exec #{script_name}
 
-      #{script_name} is powered by ActiveRecord migration framework MultiAR-#{VERSION}. More information bundler can be found
-      at its homepage: http://bundler.io
+      #{script_name} is powered by ActiveRecord migration framework MultiAR-#{VERSION}. More information about MultiAR
+      can be found at [its home page](https://github.com/Smarre/multi_ar)
+
+      More information bundler can be found [at its homepage](http://bundler.io)
       EOS
     end
 
@@ -239,8 +242,11 @@ module MultiAR
     end
 
     def script_name
-      #@script_name ||= File.basename($0)
-      Dir.pwd
+      @script_name ||= File.basename($0).gsub("_", "\\_")
+    end
+
+    def project_name
+      Pathname.new(Dir.pwd).basename
     end
   end
 end
