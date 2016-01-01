@@ -1,5 +1,9 @@
 = Changelog
 
+== 2.0.0 / 2016-XX-XX
+
+* multi_ar --init was modified to support bootstrapping existing projects. (Samu Voutilainen)
+
 == 1.1.2 / 2015-11-23
 
 * Made MultiAR::Interface not to fail to missing default config file (Samu Voutilainen)

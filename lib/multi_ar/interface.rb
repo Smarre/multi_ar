@@ -19,7 +19,7 @@ module MultiAR
     # - dry           # boolean
     # - environment   # `true` or `String`
     # - verbose       # boolean
-    # - databases     # `true` or `Array`
+    # - databases     # `false` or `Array`, by default asks for databases
     # - migration_dir # String
     #
     # If value is `true`, an option will be added to CLI interface. If the value is something else, the option will be populated by this value instead.
@@ -61,8 +61,9 @@ module MultiAR
       p = Trollop::Parser.new
       p.version @version if @version
       p.banner @description if @description
-      p.opt "init",         "Create stub environment with configuration and database.yaml",           type: :string
-      p.opt "databases",    "List of databases to perform operations",                                type: :strings if @options["databases"] == true
+      p.opt "init",         "Create stub environment with configuration and database.yaml. " +
+                            "For current dir, use “.”.",                                              type: :string
+      p.opt "databases",    "List of databases to perform operations",                                type: :strings if(@options["databases"] != false && !@options["databases"].respond_to?(:each))
       p.opt "db_config",    "Path to database config file",                                           type: :string, default: "config/database.yaml" if @options["db_config"] == true
       p.opt "config",       "Path to MultiAR framework config file",                                  type: :string, default: "config/settings.yaml" if @options["config"] == true
       p.opt "dry",          "Run the program without doing anything. Useful for debugging with -v",   type: :flag if @options["dry"] == true
@@ -140,25 +141,23 @@ module MultiAR
     # @note This method will always quit the application or raise another exception for errors. Catch SystemExit if that’s not good for you.
     def bootstrap opts
       raise "--databases must be given when bootstrapping." unless opts["databases"]
-      raise "#{opts["init"]} already exists" if File.exist? opts["init"]
+      #raise "#{opts["init"]} already exists" if File.exist? opts["init"] # We don’t want to actually check it, init is more like “add missing configuration”.
 
       config_dir = "config"
       database_config = "database.yaml"
 
-      FileUtils.mkdir opts["init"]
+      FileUtils.mkdir opts["init"] unless Dir.exist? opts["init"]
       Dir.chdir opts["init"] do
-        File.write "README", bootstrap_readme(opts)
-        File.write "Gemfile", bootstrap_gemfile
+        File.write "README.md", bootstrap_readme(opts) unless File.exist?("README.md")
+        bootstrap_gemfile
 
         FileUtils.mkdir config_dir
         Dir.chdir config_dir do
-          File.write database_config, bootstrap_db_config(opts)
+          File.write database_config, bootstrap_db_config(opts) unless File.exist?(database_config)
         end
-
-        run_bundler
       end
 
-      puts "#{opts["init"]} has been initialized. You can now run your program at the directory."
+      puts "Project at dir #{opts["init"]} has been initialized. You can now run your program at the directory."
       exit 0
     end
 
@@ -182,6 +181,7 @@ module MultiAR
     end
 
     def bootstrap_gemfile
+
       str = <<-EOS.gsub(/^ {6}/, "")
       source "https://rubygems.org/"
 
@@ -195,7 +195,17 @@ module MultiAR
         str << line
       end
 
-      str
+      if File.exist?("Gemfile")
+        puts "NOTE: you should add following to your Gemfile:"
+        puts
+        puts str
+        return
+      end
+
+      File.write "Gemfile", str
+
+      # For convenience, we’ll run the bundler for the user in case we created the Gemfile.
+      run_bundler
     end
 
     def bootstrap_readme opts
@@ -222,7 +232,8 @@ module MultiAR
     end
 
     def script_name
-      @script_name ||= File.basename($0)
+      #@script_name ||= File.basename($0)
+      Dir.pwd
     end
   end
 end
