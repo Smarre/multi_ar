@@ -134,16 +134,13 @@ module MultiAR
     private
 
     def init_multi_ar
-      if @opts["db_config"].nil?
-        db_config = DEFAULT_DB_CONFIG
-      else
-        db_config = @opts["db_config"]
-      end
-      @multi_ar = MultiAR.new config: @opts["config"],
-          databases: @opts["databases"],
-          db_config: db_config,
-          environment: @opts["environment"],
-          migration_dirs: [ @opts["migration_dir"] ]
+      opts = {}
+      opts[:db_config] = @opts["db_config"] unless opts["db_config"].nil?
+      opts[:migration_dirs] = [ @opts["migration_dir"] ]
+      opts[:config] = @opts["config"] unless @opts["config"].nil?
+      opts[:databases] = @opts["databases"]
+      opts[:environment] = @opts["environment"]
+      @multi_ar = MultiAR.new opts
     end
 
     # @note This method will always quit the application or raise another exception for errors. Catch SystemExit if that’s not good for you.
