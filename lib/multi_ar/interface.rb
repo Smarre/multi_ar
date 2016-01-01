@@ -163,6 +163,8 @@ module MultiAR
         Dir.chdir config_dir do
           File.write database_config, bootstrap_db_config(opts) unless File.exist?(database_config)
         end
+
+        bootstrap_config opts
       end
 
       puts "Project at dir #{opts["init"]} has been initialized. You can now run your program at the directory."
@@ -235,6 +237,22 @@ module MultiAR
 
       More information bundler can be found [at its homepage](http://bundler.io)
       EOS
+    end
+
+    # Writes simple config file for some defaults we can assume from input
+    def bootstrap_config opts
+      settings_file = "config/settings.yaml"
+      return if File.exist? settings_file
+      str = <<-EOF
+databases:
+      EOF
+      opts["databases"].each do |database|
+        str << "    - #{database}"
+      end
+
+      File.open settings_file, "w" do |f|
+        f.write str
+      end
     end
 
     def run_bundler
