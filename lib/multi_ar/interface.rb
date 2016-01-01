@@ -55,6 +55,8 @@ module MultiAR
       @run_by_default = false
     end
 
+    DEFAULT_DB_CONFIG = "config/database.yaml"
+
     # @note Consumes ARGV, create copy of it if you need it for something.
     # @todo hardcode shorthands
     def cli
@@ -64,7 +66,7 @@ module MultiAR
       p.opt "init",         "Create stub environment with configuration and database.yaml. " +
                             "For current dir, use “.”.",                                              type: :string
       p.opt "databases",    "List of databases to perform operations",                                type: :strings if(@options["databases"] != false && !@options["databases"].respond_to?(:each))
-      p.opt "db_config",    "Path to database config file",                                           type: :string, default: "config/database.yaml" if @options["db_config"] == true
+      p.opt "db_config",    "Path to database config file",                                           type: :string, default: DEFAULT_DB_CONFIG if @options["db_config"] == true
       p.opt "config",       "Path to MultiAR framework config file",                                  type: :string, default: "config/settings.yaml" if @options["config"] == true
       p.opt "dry",          "Run the program without doing anything. Useful for debugging with -v",   type: :flag if @options["dry"] == true
       p.opt "environment",  "The environment to use. Corresponds to database config name " +
@@ -131,9 +133,14 @@ module MultiAR
     private
 
     def init_multi_ar
+      if @opts["db_config"].nil?
+        db_config = DEFAULT_DB_CONFIG
+      else
+        db_config = @opts["db_config"]
+      end
       @multi_ar = MultiAR.new config: @opts["config"],
           databases: @opts["databases"],
-          db_config: @opts["db_config"],
+          db_config: db_config,
           environment: @opts["environment"],
           migration_dirs: [ @opts["migration_dir"] ]
     end
@@ -169,7 +176,7 @@ module MultiAR
           str << <<-EOS.gsub(/^ {10}/, "")
           #{full_name}:
             adapter: sqlite3
-            database: db/#{full_name}_.sqlite3
+            database: db/#{full_name}.sqlite3
             pool: 5
             timeout: 5000
 
