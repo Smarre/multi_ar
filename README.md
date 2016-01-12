@@ -183,7 +183,6 @@ Requirements
 Known issues
 --------------
 
-- Currently pulls whole Rails, not only the parts MultiAR requires
 - May or may not work with Rails, please report if you test it
 - There is no test for only multi_ar gem, all tests are using multi_ar_migrations at the moment
 
