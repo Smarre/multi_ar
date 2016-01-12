@@ -1,8 +1,8 @@
 
 # TODO: we don’t want to unconditionally load Rails as that gives too many unnecessary dependencies,
 # but if we need it for something, it should be conditional dep through dep-gem or just used if present
-require "rails"
-require "rails/application"
+#require "rails"
+#require "rails/application"
 
 require "active_record"
 require "active_record/tasks/database_tasks"
@@ -20,7 +20,7 @@ module MultiAR
     def self.initialize db_config: "config/database.yaml", migration_dir: "db/migrate"
       @@initialized ||= false
       return if @@initialized == true
-      Class.new(Rails::Application) unless Rails.application
+      #Class.new(Rails::Application) unless Rails.application
       raise "The database configuration file was not found. You can be pass path to it with db_config attribute. Current path: #{db_config}" unless File.exist? db_config
       db_config_data = YAML.load(ERB.new(File.read db_config).result)
       include ActiveRecord::Tasks

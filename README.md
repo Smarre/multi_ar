@@ -15,6 +15,10 @@ optional support for Rails’s migration generator (`rails generate migration ..
 Our documentation uses [YARD](http://yardoc.org), you may want to see [the generated
 documentation](http://www.rubydoc.info/github/Smarre/multi_ar/master) instead of Github README.
 
+The project consists from two parts, the core library `multi_ar` and supplementary library `multi_ar_migrations`,
+where former implements everything needed for usage of multiple databases in any application and latter providers
+migration infrastructure for creating migrations for development needs.
+
 Features
 -----------------
 
@@ -27,12 +31,16 @@ Features
 Installing
 ----------
 
-    $ gem install multi_ar
+    $ gem install multi_ar multi_ar_migrations
 
 or with Bundler
 
     # In Gemfile
     gem "multi_ar"
+
+    group :development do
+      gem "multi_ar_migrations"
+    end
 
 and then install the bundle:
 
@@ -172,12 +180,12 @@ Requirements
 
 * Ruby 2.1 or greater
 
-Known problems
+Known issues
 --------------
 
-- There is no tests
 - Currently pulls whole Rails, not only the parts MultiAR requires
 - May or may not work with Rails, please report if you test it
+- There is no test for only multi_ar gem, all tests are using multi_ar_migrations at the moment
 
 
 Developers

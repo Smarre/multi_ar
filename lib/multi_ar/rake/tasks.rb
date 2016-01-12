@@ -1,18 +1,22 @@
 
-# TODO: we don’t want to unconditionally load Rails as that gives too many unnecessary dependencies,
-# but if we need it for something, it should be conditional dep through dep-gem or just used if present
-require "rails"
-require "rails/generators"
-
 require "active_record"
 require "active_record/tasks/database_tasks"
-
-require_relative "migration_generator"
 
 # Optionally support migration_comments
 begin
   require "migration_comments"
 rescue LoadError
+end
+
+# In case there is no Rails available, let’s do simple class
+begin
+  require "rails"
+rescue LoadError
+  class Rails
+    def self.root
+      nil # TODO, we want MultiAR::root like thing somewhere
+    end
+  end
 end
 
 # @api private
@@ -65,6 +69,11 @@ module Rake
 
         DSL.desc "Creates a new migration file with the specified name"
         DSL.task :new_migration, :name, :options do |t, args|
+          # Only migration generator requires Rails generators
+          require "rails"
+          require "rails/generators"
+          require_relative "migration_generator"
+
           name = args[:name] || ENV["name"]
           options = args[:options] || ENV["options"]
 
