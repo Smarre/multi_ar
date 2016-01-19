@@ -135,7 +135,7 @@ module MultiAR
 
     def init_multi_ar
       opts = {}
-      opts[:db_config] = @opts["db_config"] unless opts["db_config"].nil?
+      opts[:db_config] = @opts["db_config"] unless @opts["db_config"].nil?
       opts[:migration_dirs] = [ @opts["migration_dir"] ]
       opts[:config] = @opts["config"] unless @opts["config"].nil?
       opts[:databases] = @opts["databases"]
