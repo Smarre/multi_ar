@@ -1,5 +1,9 @@
 = Changelog
 
+== 2.0.1 / 2016-03-07
+
+* Makes database config path configurable again (Samu Voutilainen)
+
 == 2.0.0 / 2016-01-18
 
 * multi_ar --init was modified to support bootstrapping existing projects. (Samu Voutilainen)
