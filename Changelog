@@ -1,5 +1,11 @@
 = Changelog
 
+== 3.0.0-rc1 / 2016-07-14
+
+* Updated dependencies (Samu Voutilainen)
+  - ActiveRecord to 5.x
+  - Rake to 11.x
+
 == 2.0.1 / 2016-03-07
 
 * Makes database config path configurable again (Samu Voutilainen)
