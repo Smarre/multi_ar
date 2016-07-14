@@ -2,12 +2,6 @@
 require "active_record"
 require "active_record/tasks/database_tasks"
 
-# Optionally support migration_comments
-begin
-  require "migration_comments"
-rescue LoadError
-end
-
 # In case there is no Rails available, let’s do simple class
 begin
   require "rails"
