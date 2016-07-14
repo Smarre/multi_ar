@@ -16,8 +16,8 @@ Gem::Specification.new do |s|
   s.cert_chain  = ["certs/public.pem"]
   s.signing_key = "certs/private.pem" if $0 =~ /gem\z/
   s.add_runtime_dependency "multi_ar", MultiAR::VERSION
-  s.add_runtime_dependency "rails", "~> 4"
-  s.add_runtime_dependency "railties", "~> 4"
+  s.add_runtime_dependency "rails", "~> 5.0"
+  s.add_runtime_dependency "railties", "~> 5.0"
 
   s.add_development_dependency "cucumber", "~> 2.1"
   s.add_development_dependency "sqlite3", "~> 1.3"
