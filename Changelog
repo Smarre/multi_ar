@@ -1,5 +1,10 @@
 = Changelog
 
+== 3.3.0 / 2016-07-21
+
+* Eradicated conditional loading of migration_comments gem (Samu Voutilainen)
+  (ActiveRecord 5.0 supports comments out of the box)
+
 == 3.0.0-rc1 / 2016-07-14
 
 * Updated dependencies (Samu Voutilainen)
