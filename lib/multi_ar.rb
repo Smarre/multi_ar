@@ -29,7 +29,7 @@ module MultiAR
 
     # @param databases array of available databases
     # @todo config file is overriding parameters passed here... I think it should be other way around, but need more custom logic for that :/
-    def initialize databases:, environment: "development", config: "config/settings.yaml", db_config: "config/database.yaml", migration_dirs: []
+    def initialize databases:, environment: "development", config: "config/settings.yaml", db_config: "config/database.yaml", migration_dirs: [], verbose: false
 
       # first load config
       if not config.nil? and File.exist? config
@@ -65,6 +65,8 @@ module MultiAR
       Rake::Tasks.environment = environment
       Rake::Tasks.define
 
+      @@verbose = verbose
+
       MultiAR.app = self
     end
 
@@ -72,6 +74,12 @@ module MultiAR
     # @see add_migration_dir
     def self.migration_dirs
       return @@migration_dirs
+    end
+
+    # Outputs contents if verbose flag has been passed.
+    def self.verb str
+      return unless @@verbose
+      puts str
     end
 
     # Add a path to a directory where migrations resides. For standard Rails setup, this would be “db/migrate”.

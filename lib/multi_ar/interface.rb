@@ -140,6 +140,7 @@ module MultiAR
       opts[:config] = @opts["config"] unless @opts["config"].nil?
       opts[:databases] = @opts["databases"]
       opts[:environment] = @opts["environment"]
+      opts[:verbose] = @opts["verbose"]
       @multi_ar = MultiAR.new opts
     end
 

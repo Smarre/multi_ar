@@ -1,5 +1,9 @@
 = Changelog
 
+== 3.3.1 / 2016-XX-XX
+
+* Added method MultiAR#verb for outputting content if --verbose flag has been passed (or verbose is true in MultiAR initialization) (Samu Voutilainen)
+
 == 3.3.0 / 2016-07-21
 
 * Eradicated conditional loading of migration_comments gem (Samu Voutilainen)
