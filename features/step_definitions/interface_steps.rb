@@ -82,10 +82,11 @@ Then(/^table "([^"]*)" in database "([^"]*)" should contain field "([^"]*)"$/) d
       db = SQLite3::Database.new "db/#{database}_test.sqlite3"
       rows = db.execute("SELECT name FROM sqlite_master WHERE type = 'table'")
       puts rows.inspect
-      expect(rows.count).to eq(3)
+      expect(rows.count).to eq(4)
       expect(rows[0][0]).to eq("schema_migrations")
-      expect(rows[1][0]).to eq(table)
-      expect(rows[2][0]).to eq("sqlite_sequence")
+      expect(rows[1][0]).to eq("ar_internal_metadata")
+      expect(rows[2][0]).to eq(table)
+      expect(rows[3][0]).to eq("sqlite_sequence")
 
       rows = db.execute("pragma table_info('#{table}')")
       puts rows.inspect
