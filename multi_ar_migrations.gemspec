@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
   s.version     = MultiAR::VERSION
   s.date        = Date.today
   s.summary     = "Migration utilities for MultiAR"
-  s.description = "Migration support and some other relevant utilities implemented using ActiveRecord 4."
+  s.description = "Migration support and some other relevant utilities implemented using ActiveRecord."
   s.authors     = ["Samu Voutilainen"]
   s.email       = "smar@smar.fi"
   #s.files       = Dir.glob("lib/**/*.rb")

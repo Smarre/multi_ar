@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
   s.version     = MultiAR::VERSION
   s.date        = Date.today
   s.summary     = "Multi database feature set for ActiveRecord"
-  s.description = "Core library for multi database support in any Ruby project for ActiveRecord 4.
+  s.description = "Core library for multi database support in any Ruby project for ActiveRecord.
   Migrations are supported by optional gem multi_ar_migrations."
   s.authors     = ["Samu Voutilainen"]
   s.email       = "smar@smar.fi"
