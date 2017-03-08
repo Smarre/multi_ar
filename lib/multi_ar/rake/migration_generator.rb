@@ -9,12 +9,10 @@ module ActiveRecordMigrations
     class MigrationGenerator < ::ActiveRecord::Generators::MigrationGenerator
       source_root ::ActiveRecord::Generators::MigrationGenerator.source_root
 
-      def create_migration_file
-        set_local_assigns!
-        validate_file_name!
+      def db_migrate_path
         dir = ::ActiveRecord::Tasks::DatabaseTasks.migration_dir
         db_dir = ::ActiveRecord::Tasks::DatabaseTasks.sub_db_dir
-        migration_template @migration_template, "#{dir}/#{db_dir}/#{file_name}.rb"
+        "#{dir}/#{db_dir}"
       end
     end
   end
