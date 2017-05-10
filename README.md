@@ -116,7 +116,7 @@ And then at `lib/my_database/model.rb` you’d have your custom `model.rb`:
 ActiveRecord models that uses MultiAR requires {MultiAR::MultiAR MultiAR} object initialized before the models will work. This object
 takes care of settings handling and saves information about all databases that has been used.
 
-    @multi_ar = MultiAR.new databases: [ "my_database" ], environment: "development"
+    @multi_ar = MultiAR::MultiAR.new databases: [ "my_database" ], environment: "development"
 
 Afterwards, you can use your models as you’d use them with pure ActiveRecord:
 
