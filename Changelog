@@ -1,5 +1,9 @@
 = Changelog
 
+== 4.1.0 / 2018-06-04
+
+* Updated to work with ActiveRecord 5.2.0. (Samu Voutilainen)
+
 == 4.0.0 / 2017-03-08
 
 * Converted the migration generator to override the method that defines migration path. This requires Rails 5.0.2 or higher. (Samu Voutilainen)
