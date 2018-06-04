@@ -1,4 +1,6 @@
 
+require "date"
+
 require_relative "lib/multi_ar/version"
 
 Gem::Specification.new do |s|
