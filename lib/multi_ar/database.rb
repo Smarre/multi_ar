@@ -31,8 +31,8 @@ module MultiAR
 
     # @return real connection name, nil in case connection is not available
     def self.connection_name base_name
-      raise "#{base_name} is not in databases configuration variable." unless MultiAR.app.databases.include? base_name
-      return nil unless MultiAR.app.databases.include? base_name
+      raise "#{base_name} is not in databases configuration variable." unless MultiAR::databases.include? base_name
+      return nil unless MultiAR::databases.include? base_name
       "#{base_name}_#{MultiAR.app.environment}"
     end
 

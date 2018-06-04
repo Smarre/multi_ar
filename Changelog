@@ -1,5 +1,10 @@
 = Changelog
 
+== 5.0.0 / 2018-XX-XX
+
+* Removed Mar namespace (Samu Voutilainen)
+- Changed the interface how databases are configured. (Samu Voutilainen)
+
 == 4.1.0 / 2018-06-04
 
 * Updated to work with ActiveRecord 5.2.0. (Samu Voutilainen)

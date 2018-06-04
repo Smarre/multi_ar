@@ -69,7 +69,7 @@ end
 Given(/^I have a multi_ar project named "([^"]*)" with database "([^"]*)"$/) do |project_name, database|
   @project_name = project_name
   Dir.chdir "/tmp" do
-    command = "multi_ar --init #{project_name} -d #{database}"
+    command = "multi_ar --init #{project_name} -d #{database}:/tmp/testdb"
     #puts "Running #{command}"
     puts `#{command}`
     expect($?.exitstatus).to eq(0)

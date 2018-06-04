@@ -78,7 +78,9 @@ module Rake
           name = args[:name] || ENV["name"]
           options = args[:options] || ENV["options"]
 
-          raise "You need to specify exactly one database for migration generation. See --databases. Given databases: #{databases.inspect}" if databases.size != 1
+          if MultiAR::MultiAR::databases.size != 1
+            raise "You need to specify exactly one database for migration generation. See --databases. Given databases: #{MultiAR::MultiAR::databases.inspect}"
+          end
 
           unless name
             generator = Rails::Generators.find_by_namespace "migration"
@@ -100,7 +102,7 @@ module Rake
       multiple_databases_task "migrate", "db" do |database_name|
         establish_connection database_name
 
-        context = ActiveRecord::MigrationContext.new MultiAR::MultiAR.migration_dirs
+        context = ActiveRecord::MigrationContext.new(MultiAR::MultiAR.migration_dir_for(database_name))
         context.migrate
 
         #MultiAR::MultiAR.migration_dirs.each do |dir|
@@ -146,14 +148,16 @@ module Rake
       name = (namespace && name) || "#{namespace}:#{name_without_namespace}"
       old_comment = rename_task name, namespace
 
+      databases = MultiAR::MultiAR::databases
+
       DSL.desc "Runs task #{name} for all selected databases"
       DSL.task name.to_sym do
-        databases.each do |database_name|
+        databases.each do |database_name, migration_path|
           ::Rake::Task["#{name}:#{database_name}"].invoke
         end
       end
 
-      databases.each do |database_name|
+      databases.each do |database_name, migration_path|
         DSL.desc old_comment
         DSL.task :"#{name}:#{database_name}" do
           yield database_name

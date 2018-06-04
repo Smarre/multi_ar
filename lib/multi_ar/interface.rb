@@ -20,8 +20,7 @@ module MultiAR
     # - dry           # boolean
     # - environment   # `true` or `String`
     # - verbose       # boolean
-    # - databases     # `false` or `Array`, by default asks for databases
-    # - migration_dir # String
+    # - databases     # false, `Array` or `Hash`.
     #
     # If value is `true`, an option will be added to CLI interface. If the value is something else, the option will be populated by this value instead.
     #
@@ -79,7 +78,7 @@ module MultiAR
         # TODO: not implemented currently, do we really need this?
         #p.opt "list_databases",     "Lists databases that contains migrations in the gem",                      type: :flag
         # TODO: should we do migration_dirs here too instead?
-        p.opt "migration_dir",      "The directory where migrations for databases are read from",               type: :string,  default: "db/migrate"
+        #p.opt "migration_dir",      "The directory where migrations for databases are read from",               type: :string,  default: "db/migrate"
         p.opt "task",               "Rake task to execute",                                         short: "t", type: :string
         p.opt "tasks",              "List available Rake tasks",                                    short: "T", type: :flag
       end
@@ -136,12 +135,28 @@ module MultiAR
     def init_multi_ar
       opts = {}
       opts[:db_config] = @opts["db_config"] unless @opts["db_config"].nil?
-      opts[:migration_dirs] = [ @opts["migration_dir"] ]
+      #opts[:migration_dirs] = [ @opts["migration_dir"] ]
       opts[:config] = @opts["config"] unless @opts["config"].nil?
-      opts[:databases] = @opts["databases"]
+      opts[:databases] = parse_databases_input(@opts["databases"])
       opts[:environment] = @opts["environment"]
       opts[:verbose] = @opts["verbose"]
       @multi_ar = MultiAR.new opts
+    end
+
+    def parse_databases_input databases
+      raise "You did not give proper databases. Please see --help for instructions." unless databases.respond_to? :each
+
+      out = {}
+      databases.each do |database|
+        if database.include? ":"
+          splitted = database.split(":")
+          out[splitted[0]] = splitted[1]
+        else
+          out[database] = "db/migrate/#{database}"
+        end
+      end
+
+      out
     end
 
     # @note This method will always quit the application or raise another exception for errors. Catch SystemExit if that’s not good for you.
@@ -171,7 +186,12 @@ module MultiAR
 
     def bootstrap_db_config opts
       str = ""
-      opts["databases"].each do |db|
+      databases = parse_databases_input(opts["databases"])
+      databases.each do |db, migration_path|
+        # This is a bit misleading place to create the migration dir, but it needs to be done somewhere.
+        Dir.mkdir(migration_path)
+
+        # Create the config file
         [ "development", "production", "test"].each do |env|
           full_name = "#{db}_#{env}"
           str << <<-EOS.gsub(/^ {10}/, "")
@@ -241,11 +261,14 @@ module MultiAR
     def bootstrap_config opts
       settings_file = "config/settings.yaml"
       return if File.exist? settings_file
-      str = <<-EOF
-databases:
+      str = <<~EOF
+      databases:
       EOF
-      opts["databases"].each do |database|
-        str << "    - #{database}"
+      databases = parse_databases_input(opts["databases"])
+      databases.each do |database, path|
+        str << "-\n"
+        str << "    database: #{database}\n"
+        str << "    migration_path: #{path}\n"
       end
 
       File.open settings_file, "w" do |f|
