@@ -189,7 +189,7 @@ module MultiAR
       databases = parse_databases_input(opts["databases"])
       databases.each do |db, migration_path|
         # This is a bit misleading place to create the migration dir, but it needs to be done somewhere.
-        Dir.mkdir(migration_path)
+        FileUtils.mkdir_p(migration_path)
 
         # Create the config file
         [ "development", "production", "test"].each do |env|

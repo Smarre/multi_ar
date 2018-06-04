@@ -3,7 +3,9 @@ require_relative "../../lib/multi_ar"
 
 # We first need to create instance of MultiAR
 
-databases = { "testdb" => "/tmp" }
+Dir.mkdir "/tmp/testdb"
+
+databases = { "testdb" => "/tmp/testdb" }
 $multi_ar = MultiAR::MultiAR.new databases: databases, environment: "test", db_config: "config/database.yaml"
 
 $multi_ar.rake_task "db:create"
