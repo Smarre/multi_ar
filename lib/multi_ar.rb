@@ -1,5 +1,4 @@
 
-
 require_relative "multi_ar/rake/ext"
 require_relative "multi_ar/rake/tasks"
 
@@ -19,7 +18,7 @@ module MultiAR
 
     # @api private
     # This will always be overridden, when MultiAR is initialized. Don’t try to do any funny logic with this.
-    @@migration_dirs = []
+    #@@migration_dirs = []
 
     class << self
       # Instance of MultiAR::MultiAR, automatically assigned by MultiAR::MultiAR#new.
@@ -48,13 +47,13 @@ module MultiAR
       @databases = databases
       @db_config = db_config
       @environment = environment
-      @@migration_dirs = migration_dirs unless migration_dirs.empty? # This takes care of that it will only be overridden if there is any given values, making default configs work
+      #@@migration_dirs = migration_dirs unless migration_dirs.empty? # This takes care of that it will only be overridden if there is any given values, making default configs work
+      ActiveRecord::Tasks::DatabaseTasks.migrations_paths = migration_dirs
 
       Database.initialize db_config: db_config
 
-      ActiveRecord::Tasks::DatabaseTasks.class_eval { attr_accessor :sub_db_dir, :migration_dir }
+      ActiveRecord::Tasks::DatabaseTasks.class_eval { attr_accessor :sub_db_dir }
       ActiveRecord::Tasks::DatabaseTasks.sub_db_dir = databases.first # TODO: I don’t think this is how it should work
-      ActiveRecord::Tasks::DatabaseTasks.migration_dir = migration_dirs.first # TODO: I don’t think this is how it should work
 
       @rake = ::Rake::Application.new
       ::Rake.application = @rake
@@ -73,7 +72,7 @@ module MultiAR
     # Array of paths to directories where migrations resides.
     # @see add_migration_dir
     def self.migration_dirs
-      return @@migration_dirs
+      ActiveRecord::Tasks::DatabaseTasks.migrations_paths
     end
 
     # Outputs contents if verbose flag has been passed.
@@ -93,7 +92,7 @@ module MultiAR
     # @note often you want to add full path to this dir, `__dir__` is useful for this.
     def self.add_migration_dir path
       raise "Migration dir #{path} does not exist." unless Dir.exist? path
-      @@migration_dirs << path
+      ActiveRecord::Tasks::DatabaseTasks.migrations_paths << path
     end
 
     # @todo this shows rake in start of the command, we want to show multi_ar instead.

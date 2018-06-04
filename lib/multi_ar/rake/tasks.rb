@@ -5,11 +5,18 @@ require "active_record/tasks/database_tasks"
 # In case there is no Rails available, let’s do simple class
 begin
   require "rails"
+  require "rails/application"
+
+  Class.new(Rails::Application) unless Rails.application
 rescue LoadError
   class Rails
     def self.root
       nil # TODO, we want MultiAR::root like thing somewhere
     end
+
+    #def self.paths
+    #  { "db/migrate" => "/dev/null" }
+    #end
   end
 end
 
@@ -93,11 +100,14 @@ module Rake
       multiple_databases_task "migrate", "db" do |database_name|
         establish_connection database_name
 
-        MultiAR::MultiAR.migration_dirs.each do |dir|
-          path = "#{dir}/#{database_name}/"
-          # The database should be present only on one migration dir, so this will fail if there is more than one migration dir
-          ActiveRecord::Migrator.migrate path if Dir.exist? path
-        end
+        context = ActiveRecord::MigrationContext.new MultiAR::MultiAR.migration_dirs
+        context.migrate
+
+        #MultiAR::MultiAR.migration_dirs.each do |dir|
+        #  path = "#{dir}/#{database_name}/"
+        #  # The database should be present only on one migration dir, so this will fail if there is more than one migration dir
+        #  ActiveRecord::Migrator.migrate path if Dir.exist? path
+        #end
       end
 
       multiple_databases_task "create", "db" do |database_name|
