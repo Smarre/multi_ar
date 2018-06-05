@@ -4,8 +4,6 @@ require_relative "multi_ar/rake/tasks"
 
 require_relative "multi_ar/database"
 
-require "byebug"
-
 # Main module.
 module MultiAR
 
