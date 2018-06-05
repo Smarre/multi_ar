@@ -77,6 +77,22 @@ module MultiAR
       MultiAR.app = self
     end
 
+    # A helper method to add migrations for multiple databases that reside in same location.
+    #
+    # Expects the given directory contain subdirectories that contain the actual migrations.
+    # For example, `db/migrate/_db_name_`, where `db/migrate` is dir given as an argument to this
+    # method and `_db_name_` is name of the database.
+    def self.add_migration_dir dir
+      raise "Directory #{dir} does not exist." unless Dir.exist? dir
+
+      Dir.chdir dir do
+        dbs = Dir.glob "*/"
+        dbs.each do |database|
+          add_database database, "#{dir}/#{database.chop}"
+        end
+      end
+    end
+
     # Array of paths to directories where migrations resides.
     # @see add_database
     def self.migration_dirs
