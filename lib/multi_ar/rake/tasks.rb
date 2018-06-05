@@ -120,11 +120,59 @@ module Rake
       multiple_databases_task "rollback", "db" do |database_name|
         establish_connection database_name
         step = ENV['STEP'] ? ENV['STEP'].to_i : 1
-        MultiAR::MultiAR.migration_dirs.each do |dir|
-          path = "#{dir}/#{database_name}/"
-          # The database should be present only on one migration dir, so this will fail if there is more than one migration dir
-          ActiveRecord::Migrator.rollback(path, step) if Dir.exist? path
+
+        context = ActiveRecord::MigrationContext.new(MultiAR::MultiAR.databases[database_name])
+        context.rollback step
+      end
+
+      multiple_databases_task "forward", "db" do |database_name|
+        establish_connection database_name
+        step = ENV['STEP'] ? ENV['STEP'].to_i : 1
+
+        context = ActiveRecord::MigrationContext.new(MultiAR::MultiAR.databases[database_name])
+        context.forward step
+      end
+
+      multiple_databases_task "down", "db:migrate" do |database_name|
+        establish_connection database_name
+        raise "db:down is used to go back to certain version. Use db:rollback if you want to go back n migrations." unless ENV["VERSION"]
+        version = ENV["VERSION"]
+
+        context = ActiveRecord::MigrationContext.new(MultiAR::MultiAR.databases[database_name])
+        context.down version
+      end
+
+      multiple_databases_task "up", "db:migrate" do |database_name|
+        establish_connection database_name
+        raise "db:up is used to go to certain version. Use db:forward if you want to go up n migrations." unless ENV["VERSION"]
+        version = ENV["VERSION"]
+
+        context = ActiveRecord::MigrationContext.new(MultiAR::MultiAR.databases[database_name])
+        context.up version
+      end
+
+      multiple_databases_task "status", "db:migrate" do |database_name|
+        establish_connection database_name
+
+        unless ActiveRecord::SchemaMigration.table_exists?
+          abort "Schema migrations table does not exist yet."
         end
+
+        #raise "db:up is used to go to certain version. Use db:forward if you want to go up n migrations." unless ENV["VERSION"]
+        #version = ENV["VERSION"]
+
+        #context = ActiveRecord::MigrationContext.new(MultiAR::MultiAR.databases[database_name])
+        #context.up version
+
+        # output
+        puts "\ndatabase: #{ActiveRecord::Base.connection_config[:database]}\n\n"
+        puts "#{'Status'.center(8)}  #{'Migration ID'.ljust(14)}  Migration Name"
+        puts "-" * 50
+        ActiveRecord::Base.connection.migration_context.migrations_status.each do |status, version, name|
+          puts "#{status.center(8)}  #{version.ljust(14)}  #{name}"
+        end
+        puts
+
       end
 
       multiple_databases_task "drop", "db" do |database_name|
