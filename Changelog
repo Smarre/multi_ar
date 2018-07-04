@@ -1,6 +1,6 @@
 = Changelog
 
-== 5.0.0 / 2018-XX-XX
+== 5.0.0 / 2018-07-04
 
 * Removed Mar namespace (Samu Voutilainen)
 - Changed the interface how databases are configured. (Samu Voutilainen)
