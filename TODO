@@ -1,0 +1,7 @@
+Create an cli interface like
+
+multi_ar generate-migration "create_products"
+multi_ar databases
+multi_ar generate-database "database_name"
+multi_ar task "db:create"
+multi_ar tasks
