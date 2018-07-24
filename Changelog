@@ -1,5 +1,9 @@
 = Changelog
 
+== 5.1.0 / 2018-xx-xx
+
+* Databases given in CLI doesn’t get overridden by config any more (Samu Voutilainen)
+
 == 5.0.0 / 2018-07-04
 
 * Removed Mar namespace (Samu Voutilainen)

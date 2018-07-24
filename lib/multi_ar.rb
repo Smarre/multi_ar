@@ -27,7 +27,7 @@ module MultiAR
 
     # @param databases array of available databases
     # @todo config file is overriding parameters passed here... I think it should be other way around, but need more custom logic for that :/
-    def initialize databases:, environment: "development", config: "config/settings.yaml", db_config: "config/database.yaml", verbose: false, migration_framework: true
+    def initialize databases: nil, environment: "development", config: "config/settings.yaml", db_config: "config/database.yaml", verbose: false, migration_framework: true
 
       # first load config
       if not config.nil? and File.exist? config
@@ -35,14 +35,10 @@ module MultiAR
         config = Psych.load_file config
         b = binding
         config.each do |key, value|
-          if key == "databases"
-            out = {}
-            value.each do |database|
-              out[database["database"]] = database["migration_path"]
-            end
-            value = out
+          # If databases have been passed, we don’t have much reason to override it from config
+          if key != "databases" || databases.nil?
+            b.local_variable_set key.to_sym, value
           end
-          b.local_variable_set key.to_sym, value
         end
       end
 
@@ -146,10 +142,19 @@ module MultiAR
 
     private
 
+    # Supports three different input formats:
+    #
+    # 1. Array with strings of database names
+    # 2. Array with hashes of { "database" => "db_name", "migration_path" => "/path/to/migrations" }
+    # 3. Hash with key as database name and value as migration path
     def parse_databases_input dbs
       if dbs.kind_of? Array
         dbs.each do |database|
-          ::MultiAR::MultiAR::add_database database, "db/migrate/#{database}"
+          if database.kind_of? Hash
+            ::MultiAR::MultiAR::add_database database["database"], database["migration_path"]
+          else
+            ::MultiAR::MultiAR::add_database database, "db/migrate/#{database}"
+          end
         end
         return
       end

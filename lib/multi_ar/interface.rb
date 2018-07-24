@@ -145,6 +145,7 @@ module MultiAR
     end
 
     def parse_databases_input databases
+      return if databases.nil?
       raise "You did not give proper databases. Please see --help for instructions." unless databases.respond_to? :each
 
       out = {}
