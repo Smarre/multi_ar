@@ -1,8 +1,10 @@
 = Changelog
 
-== 5.1.0 / 2018-xx-xx
+== 5.1.0 / 2018-09-06
 
 * Databases given in CLI doesn’t get overridden by config any more (Samu Voutilainen)
+* Eradicate most of migration_framework variable for more dynamic behavior (Samu Voutilainen)
+* Removed multi_ar binary from multi_ar gem. It’s present in multi_ar_migrations (Samu Voutilainen)
 
 == 5.0.0 / 2018-07-04
 
