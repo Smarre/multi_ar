@@ -152,6 +152,8 @@ module MultiAR
         if database.include? ":"
           splitted = database.split(":")
           out[splitted[0]] = splitted[1]
+        elsif !@options["migration_dir"].nil?
+          out[database] = "#{@options["migration_dir"]}/#{database}"
         else
           out[database] = "db/migrate/#{database}"
         end

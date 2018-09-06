@@ -4,6 +4,7 @@
 
 * Bundle multi_ar executable with multi_ar instead of multi_ar_migrations (Samu Voutilainen)
 * Allow passing db_config and config through CLI (Samu Voutilainen)
+* Allow passing single migration dir with CLI to construct migrations paths for each database (Samu Voutilainen)
 
 == 5.1.0 / 2018-09-06
 
