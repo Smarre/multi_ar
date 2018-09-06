@@ -27,7 +27,7 @@ module MultiAR
 
     # @param databases array of available databases
     # @todo config file is overriding parameters passed here... I think it should be other way around, but need more custom logic for that :/
-    def initialize databases: nil, environment: "development", config: "config/settings.yaml", db_config: "config/database.yaml", verbose: false, migration_framework: true
+    def initialize databases: nil, environment: "development", config: "config/settings.yaml", db_config: "config/database.yaml", verbose: false
 
       # first load config
       if not config.nil? and File.exist? config
@@ -44,14 +44,13 @@ module MultiAR
 
       # then check that we have data in format we want it to be
       raise "#{db_config} is not valid path to a file. Try specifying --db-config <path> or configuring it in the configuration file." if db_config.nil? or !File.exist?(db_config)
-      raise "databases is not responding to :each. Try passing passing --databases <database> or configuring it in the configuration file." unless databases.respond_to? :each
+      #raise "databases is not responding to :each. Try passing passing --databases <database> or configuring it in the configuration file." unless databases.respond_to? :each
 
-      parse_databases_input databases
+      parse_databases_input databases unless databases.nil?
 
       #@databases = databases
       @db_config = db_config
       @environment = environment
-      @migration_framework = migration_framework
       #@@migration_dirs = migration_dirs unless migration_dirs.empty? # This takes care of that it will only be overridden if there is any given values, making default configs work
       #ActiveRecord::Tasks::DatabaseTasks.migrations_paths = migration_dirs
 
@@ -116,9 +115,11 @@ module MultiAR
     #
     # @note often you want to add full path to this dir, `__dir__` is useful for this.
     def self.add_database database_name, migration_path
-      if @migration_framework
-        raise "Migration dir #{migration_path} does not exist." unless Dir.exist? migration_path
+      raise "Migration dir #{migration_path} does not exist." unless Dir.exist? migration_path
+      begin
         ActiveRecord::Tasks::DatabaseTasks.migrations_paths << migration_path
+      rescue NameError
+        # multi_ar can be used without migration support, so adding a database to migration paths is only necessary when actually running migrations.
       end
       @@__databases[database_name] = migration_path
     end
@@ -139,6 +140,15 @@ module MultiAR
     def self.databases
       @@__databases
     end
+
+    # TODO: remember to remove these if not needed...
+    # Helper to resolve a path to database
+    #def self.resolve_database_path
+
+    #end
+
+    #def self.resolve_databases_paths
+    #end
 
     private
 

@@ -140,7 +140,6 @@ module MultiAR
       opts[:databases] = parse_databases_input(@opts["databases"])
       opts[:environment] = @opts["environment"]
       opts[:verbose] = @opts["verbose"]
-      opts[:migration_framework] = @migration_framework
       @multi_ar = MultiAR.new opts
     end
 
