@@ -3,6 +3,7 @@
 == 5.1.1 / 2018-09-06
 
 * Bundle multi_ar executable with multi_ar instead of multi_ar_migrations (Samu Voutilainen)
+* Allow passing db_config and config through CLI (Samu Voutilainen)
 
 == 5.1.0 / 2018-09-06
 

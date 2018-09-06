@@ -7,6 +7,8 @@ require_relative "../lib/multi_ar/version"
 interface = MultiAR::Interface.new
 interface.version = "multi_ar-#{MultiAR::VERSION}"
 interface.description = "Multi database migration tools utilizing ActiveRecord"
+interface.options["db_config"] = true
+interface.options["config"] = true
 interface.migration_framework = true
 opts = interface.cli do |parser|
   # Nya.
