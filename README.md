@@ -156,7 +156,7 @@ it may make sense to use {MultiAR::Interface MultiAR’s CLI interface support} 
     # interface.migration_framework = true # Enables Rake tasks for migration generation; not needed unless you plan to generate migrations with this executable
     interface.options["databases"] = true
     opts = interface.cli do |parser|
-      # You can add your custom Trollop options here
+      # You can add your custom optimist options here
       parser.opt :port, "Port where to bind Sinatra", default: "9999", type: :string
     end
 

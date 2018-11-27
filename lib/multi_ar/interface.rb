@@ -1,7 +1,7 @@
 
 require "fileutils"
 require "pathname"
-require "trollop"
+require "optimist"
 
 require_relative "../multi_ar"
 require_relative "version"
@@ -60,7 +60,7 @@ module MultiAR
     # @note Consumes ARGV, create copy of it if you need it for something.
     # @todo hardcode shorthands
     def cli
-      p = Trollop::Parser.new
+      p = Optimist::Parser.new
       p.version @version if @version
       p.banner @description if @description
       p.opt "init",         "Create stub environment with configuration and database.yaml. " +
@@ -85,13 +85,13 @@ module MultiAR
 
       yield p if block_given?
 
-      opts = Trollop::with_standard_exception_handling p do
+      opts = Optimist::with_standard_exception_handling p do
         args = ARGV.clone
 
         result = p.parse ARGV
 
         if not @run_by_default
-          raise Trollop::HelpNeeded if args.empty?
+          raise Optimist::HelpNeeded if args.empty?
         end
 
         result
