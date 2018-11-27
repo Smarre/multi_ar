@@ -1,5 +1,9 @@
 = Changelog
 
+== 5.1.2 / 2018-11-27
+
+* Changed trollop gem to optimist due to upstream change (Samu Voutilainen)
+
 == 5.1.1 / 2018-09-06
 
 * Bundle multi_ar executable with multi_ar instead of multi_ar_migrations (Samu Voutilainen)
