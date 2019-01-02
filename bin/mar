@@ -1,4 +1,0 @@
-#!/usr/bin/env ruby
-
-# A hack to get this file work as wrapper for the real exe
-require "#{__dir__}/multi_ar"
