@@ -15,5 +15,5 @@ Feature: We have CLI interface, which can be used for various tasks, like migrat
   Scenario: After I have integrated multi_ar to my project, I want to use it to generate some migrations
     Given I have a multi_ar project named "interface_test_project" with database "interface_test_project"
     When I run "multi_ar -d interface_test_project:/tmp/testdb -t 'db:new_migration[CreateTestTable, test_value:string]'" for that project
-    And I run "multi_ar -d interface_test_project -t db:migrate -e test" for that project
+    And I run "multi_ar -d interface_test_project:/tmp/testdb -t db:migrate -e test" for that project
     Then table "test_tables" in database "interface_test_project" should contain field "test_value"
