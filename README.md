@@ -180,12 +180,6 @@ Requirements
 
 * Ruby 2.1 or greater
 
-Known issues
---------------
-
-- May or may not work with Rails, please report if you test it
-- There is no test for only multi_ar gem, all tests are using multi_ar_migrations at the moment
-
 
 Developers
 ----------
