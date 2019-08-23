@@ -9,7 +9,7 @@ multi_ar
 Description
 -----------
 
-Allows you to use multiple databases with [ActiveRecord 5](https://rubygems.org/gems/activerecord), with
+Allows you to use multiple databases with [ActiveRecord 6](https://rubygems.org/gems/activerecord), with
 optional support for Rails’s migration generator (`rails generate migration ..`).
 
 Our documentation uses [YARD](http://yardoc.org), you may want to see [the generated
