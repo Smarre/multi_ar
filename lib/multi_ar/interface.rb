@@ -65,6 +65,7 @@ module MultiAR
       p.banner @description if @description
       p.opt "init",         "Create stub environment with configuration and database.yaml. " +
                             "For current dir, use “.”.",                                              type: :string
+      p.opt "gem",          "Run migrations from an installed gem",                                   type: :string
       p.opt "databases",    "List of databases to perform operations",                                type: :strings if(@options["databases"] != false && !@options["databases"].respond_to?(:each))
       p.opt "db_config",    "Path to database config file",                                           type: :string, default: DEFAULT_DB_CONFIG if @options["db_config"] == true
       p.opt "config",       "Path to MultiAR framework config file",                                  type: :string, default: "config/settings.yaml" if @options["config"] == true
@@ -137,6 +138,7 @@ module MultiAR
       opts[:db_config] = @opts["db_config"] unless @opts["db_config"].nil?
       #opts[:migration_dirs] = [ @opts["migration_dir"] ]
       opts[:config] = @opts["config"] unless @opts["config"].nil?
+      opts[:migrations_from_gem] = @opts["gem"] unless @opts["gem"].nil?
       opts[:databases] = parse_databases_input(@opts["databases"])
       opts[:environment] = @opts["environment"]
       opts[:verbose] = @opts["verbose"]

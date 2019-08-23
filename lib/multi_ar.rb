@@ -19,6 +19,8 @@ module MultiAR
     # This will always be overridden, when MultiAR is initialized. Don’t try to do any funny logic with this.
     @@__databases = {}
 
+    @default_migration_path = "db/migrate"
+
     class << self
       # Instance of MultiAR::MultiAR, automatically assigned by MultiAR::MultiAR#new.
       # Used internally in the gem, to access configuration and other internal parts.
@@ -27,7 +29,7 @@ module MultiAR
 
     # @param databases array of available databases
     # @todo config file is overriding parameters passed here... I think it should be other way around, but need more custom logic for that :/
-    def initialize databases: nil, environment: "development", config: "config/settings.yaml", db_config: "config/database.yaml", verbose: false
+    def initialize databases: nil, environment: "development", config: "config/settings.yaml", db_config: "config/database.yaml", verbose: false, migrations_from_gem: nil
 
       # first load config
       if not config.nil? and File.exist? config
@@ -45,6 +47,9 @@ module MultiAR
       # then check that we have data in format we want it to be
       raise "#{db_config} is not valid path to a file. Try specifying --db-config <path> or configuring it in the configuration file." if db_config.nil? or !File.exist?(db_config)
       #raise "databases is not responding to :each. Try passing passing --databases <database> or configuring it in the configuration file." unless databases.respond_to? :each
+
+      # One can run migrations from a gem, instead of current project.
+      load_migration_gem migrations_from_gem, databases if not migrations_from_gem.nil?
 
       parse_databases_input databases unless databases.nil?
 
@@ -152,6 +157,36 @@ module MultiAR
 
     private
 
+    def load_migration_gem migrations_from_gem, databases
+      # If the gem is not installed, we just want to fail.
+      gem migrations_from_gem
+
+      spec = Gem.loaded_specs[migrations_from_gem]
+      gem_dir = nil
+      if spec.respond_to? :full_gem_path
+        gem_dir = spec.full_gem_path
+      else
+        require_paths = spec["require_paths"]
+        gem_dir = require_paths[0]
+      end
+
+      # This file contains gem specific details which can be used to bootstrap MultiAR.
+      # There could be default values, but for security, as loading arbitrary gems accidentally could cause hard-to-recognize security bugs, since migrations are plain Ruby code.
+      # TODO: document contents of that file somewhere.
+      info_file = "#{gem_dir}/config/multi_ar_gem.yaml"
+
+      raise "File #{info_file} does not exist. Please check that your gem contains config/multi_ar_gem.yaml for automatic operation." unless File.exist? info_file
+      yaml = YAML.load_file info_file
+
+      migration_dir = yaml["migration_dir"]
+
+      # Put in gem’s migration path, so stuff should just magically work
+
+      databases.each do |database, migration_path|
+        databases[database] = "#{gem_dir}/#{migration_dir}"
+      end
+    end
+
     # Supports three different input formats:
     #
     # 1. Array with strings of database names
@@ -163,7 +198,7 @@ module MultiAR
           if database.kind_of? Hash
             ::MultiAR::MultiAR::add_database database["database"], database["migration_path"]
           else
-            ::MultiAR::MultiAR::add_database database, "db/migrate/#{database}"
+            ::MultiAR::MultiAR::add_database database, "#{default_migration_path}/#{database}"
           end
         end
         return
