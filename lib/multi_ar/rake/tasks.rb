@@ -102,7 +102,7 @@ module Rake
       multiple_databases_task "migrate", "db" do |database_name|
         establish_connection database_name
 
-        context = ActiveRecord::MigrationContext.new(MultiAR::MultiAR.databases[database_name])
+        context = ActiveRecord::MigrationContext.new(MultiAR::MultiAR.databases[database_name], ::ActiveRecord::Base.connection.schema_migration)
         context.migrate
 
         #MultiAR::MultiAR.migration_dirs.each do |dir|
