@@ -20,12 +20,12 @@ Gem::Specification.new do |s|
   s.signing_key = "certs/private.pem" if $0 =~ /gem\z/
   s.add_runtime_dependency "optimist", "~> 3.0"
   s.add_runtime_dependency "activerecord", "~> 6.0"
-  s.add_runtime_dependency "rake", "~> 11.2"
+  s.add_runtime_dependency "rake", "~> 12.3"
   s.add_runtime_dependency "safe_attributes", "~> 1.0"
 
   s.add_development_dependency "redcarpet", "~> 3.3"
-  s.add_development_dependency "github-markup", "~> 1.4"
-  s.add_development_dependency "cucumber", "~> 2.1"
+  s.add_development_dependency "github-markup", "~> 3.0"
+  s.add_development_dependency "cucumber", "~> 3.1"
   s.add_development_dependency "sqlite3", "~> 1.3"
   s.add_development_dependency "rspec", "~> 3.4"
 end
