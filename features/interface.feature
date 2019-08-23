@@ -4,7 +4,7 @@ Feature: We have CLI interface, which can be used for various tasks, like migrat
   Scenario: I have existing project, which suddenly is in need of a database. I want to employ multi_ar for that project.
     Given I have existing project named "interface_test_project"
     And project "interface_test_project" has existing bundle with multi_ar
-    When I run "multi_ar --init '.' -d interface_test_db" for that project
+    When I successfully run `multi_ar --init '.' -d interface_test_db`
     Then there should be following files:
       | README.md |
       | config/database.yaml |
