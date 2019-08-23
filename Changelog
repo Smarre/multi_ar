@@ -1,5 +1,9 @@
 = Changelog
 
+== 6.0.0 / XXXX-XX-XX
+
+* Rails 6.0 support
+
 == 5.1.3 / 2018-11-27
 
 * Actually use optimist instead of trollop... (Samu Voutilainen)

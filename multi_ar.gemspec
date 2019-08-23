@@ -19,7 +19,7 @@ Gem::Specification.new do |s|
   s.cert_chain  = ["certs/public.pem"]
   s.signing_key = "certs/private.pem" if $0 =~ /gem\z/
   s.add_runtime_dependency "optimist", "~> 3.0"
-  s.add_runtime_dependency "activerecord", "~> 5.0"
+  s.add_runtime_dependency "activerecord", "~> 6.0"
   s.add_runtime_dependency "rake", "~> 11.2"
   s.add_runtime_dependency "safe_attributes", "~> 1.0"
 
