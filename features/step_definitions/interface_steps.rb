@@ -40,16 +40,6 @@ Given(/^project "([^"]*)" has existing bundle with multi_ar$/) do |project_name|
   end
 end
 
-
-When(/^I run "([^"]*)" for that project$/) do |command|
-  Dir.chdir "/tmp" do
-    Dir.chdir @project_name do
-      puts `#{command}`
-      expect($?.exitstatus).to eq(0)
-    end
-  end
-end
-
 Then(/^there should be following files:$/) do |table|
   # table is a Cucumber::Core::Ast::DataTable
 
