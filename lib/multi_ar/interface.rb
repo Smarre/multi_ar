@@ -157,7 +157,7 @@ module MultiAR
         elsif !@options["migration_dir"].nil?
           out[database] = "#{@options["migration_dir"]}/#{database}"
         else
-          out[database] = "db/migrate/#{database}"
+          out[database] = nil
         end
       end
 
@@ -182,6 +182,8 @@ module MultiAR
           File.write database_config, bootstrap_db_config(opts) unless File.exist?(database_config)
         end
 
+        bootstrap_db_dir opts
+
         bootstrap_config opts
       end
 
@@ -193,9 +195,6 @@ module MultiAR
       str = ""
       databases = parse_databases_input(opts["databases"])
       databases.each do |db, migration_path|
-        # This is a bit misleading place to create the migration dir, but it needs to be done somewhere.
-        FileUtils.mkdir_p(migration_path)
-
         # Create the config file
         [ "development", "production", "test"].each do |env|
           full_name = "#{db}_#{env}"
@@ -211,6 +210,14 @@ module MultiAR
       end
 
       str
+    end
+
+    def bootstrap_db_dir opts
+      databases = parse_databases_input(opts["databases"])
+      databases.each do |db, migration_path|
+        migration_path = "db/migrate/#{db}" if migration_path.nil?
+        FileUtils.mkdir_p(migration_path)
+      end
     end
 
     def bootstrap_gemfile

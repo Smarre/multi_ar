@@ -10,7 +10,8 @@ module ActiveRecordMigrations
       source_root ::ActiveRecord::Generators::MigrationGenerator.source_root
 
       def db_migrate_path
-        databases = MultiAR::MultiAR::databases.first[1]
+        database_name = MultiAR::MultiAR::databases.first[0]
+        MultiAR::MultiAR::solve_migration_path database_name
       end
     end
   end

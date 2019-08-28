@@ -5,6 +5,16 @@ After("@project_test") do
   FileUtils.remove_entry_secure("/tmp/#{@project_name}")
 end
 
+Given(/^I have a multi_ar project named "([^"]*)" with database "([^"]*)"$/) do |project_name, database|
+  @project_name = project_name
+  Dir.chdir "/tmp" do
+    command = "multi_ar --init #{project_name} -d #{database}"
+    #puts "Running #{command}"
+    puts `#{command}`
+    expect($?.exitstatus).to eq(0)
+  end
+end
+
 Given(/^I have existing project named "([^"]*)"$/) do |project_name|
   Dir.chdir "/tmp" do
     @project_name = project_name
@@ -40,6 +50,10 @@ Given(/^project "([^"]*)" has existing bundle with multi_ar$/) do |project_name|
   end
 end
 
+Given("I create directory {string}") do |dir|
+  FileUtils.mkdir_p dir
+end
+
 Then(/^there should be following files:$/) do |table|
   # table is a Cucumber::Core::Ast::DataTable
 
@@ -54,16 +68,6 @@ end
 
 Then(/^"([^"]*)" should contain database config for "([^"]*)"$/) do |filename, database|
   expect(File.open("/tmp/#{@project_name}/#{filename}").readlines.join).to include("#{database}_development:")
-end
-
-Given(/^I have a multi_ar project named "([^"]*)" with database "([^"]*)"$/) do |project_name, database|
-  @project_name = project_name
-  Dir.chdir "/tmp" do
-    command = "multi_ar --init #{project_name} -d #{database}:/tmp/testdb"
-    #puts "Running #{command}"
-    puts `#{command}`
-    expect($?.exitstatus).to eq(0)
-  end
 end
 
 Then(/^table "([^"]*)" in database "([^"]*)" should contain field "([^"]*)"$/) do |table, database, field|

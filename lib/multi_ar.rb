@@ -120,11 +120,13 @@ module MultiAR
     #
     # @note often you want to add full path to this dir, `__dir__` is useful for this.
     def self.add_database database_name, migration_path
-      raise "Migration dir #{migration_path} does not exist." unless Dir.exist? migration_path
-      begin
-        ActiveRecord::Tasks::DatabaseTasks.migrations_paths << migration_path
-      rescue NameError
-        # multi_ar can be used without migration support, so adding a database to migration paths is only necessary when actually running migrations.
+      unless migration_path.nil?
+        raise "Migration dir #{migration_path} does not exist." unless Dir.exist? migration_path
+        begin
+          ActiveRecord::Tasks::DatabaseTasks.migrations_paths << migration_path
+        rescue NameError
+          # multi_ar can be used without migration support, so adding a database to migration paths is only necessary when actually running migrations.
+        end
       end
       @@__databases[database_name] = migration_path
     end
@@ -144,6 +146,17 @@ module MultiAR
 
     def self.databases
       @@__databases
+    end
+
+    # Returns calculated migration path or if path have not been given, fallback to default db/migrate/DB_NAME if it exists.
+    def self.solve_migration_path database_name
+      path = self.databases[database_name]
+      if path.nil?
+        path = "db/migrate/#{database_name}"
+        raise "Trying to use migrations for non-existing database. Please specify database if you have migrations in custom location. Given database: #{database_name}" unless File.exist? path
+      end
+
+      path
     end
 
     # TODO: remember to remove these if not needed...
