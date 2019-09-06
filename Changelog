@@ -6,6 +6,7 @@
 * Made it possible to run migrations directly from a gem. (Samu Voutilainen)
 * Made databases’ migration path to default to db/migrate/DB_NAME (Samu Voutilainen)
 * Updated expired gem signing certificate (Samu Voutilainen)
+* Made “multi_ar --init” to use “bundle gem” as first step of bootstrap
 
 == 5.1.3 / 2018-11-27
 

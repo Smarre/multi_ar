@@ -107,7 +107,7 @@ module MultiAR
       bootstrap opts if opts["init"] # Bootstrap will exit after execution; in that case nothing after this will be run.
 
       raise "--config must be path to valid file" if opts[:config_given] and not File.exist? opts["config"]
-      raise "Database config #{opts["db_config"]} seems to be missing" if @options["db_config"] and not File.exist? opts["db_config"]
+      raise "Database config #{opts["db_config"]} seems to be missing. See --help for usage." if @options["db_config"] and not File.exist? opts["db_config"]
 
       @opts = opts
 
@@ -166,16 +166,19 @@ module MultiAR
 
     # @note This method will always quit the application or raise another exception for errors. Catch SystemExit if that’s not good for you.
     def bootstrap opts
-      raise "--databases must be given when bootstrapping." unless opts["databases"]
+      raise "Please specify --databases for your new project. See --help." unless opts["databases"]
       #raise "#{opts["init"]} already exists" if File.exist? opts["init"] # We don’t want to actually check it, init is more like “add missing configuration”.
 
       config_dir = "config"
       database_config = "database.yaml"
 
-      FileUtils.mkdir opts["init"] unless Dir.exist? opts["init"]
+      puts opts.inspect
+      execute_bundle_gem opts if not Dir.exist? opts["init"]
+
+      #FileUtils.mkdir opts["init"] unless Dir.exist? opts["init"]
       Dir.chdir opts["init"] do
         File.write "README.md", bootstrap_readme(opts) unless File.exist?("README.md")
-        bootstrap_gemfile
+        #bootstrap_gemfile
 
         FileUtils.mkdir config_dir unless Dir.exist? config_dir
         Dir.chdir config_dir do
@@ -189,6 +192,17 @@ module MultiAR
 
       puts "Project at dir #{opts["init"]} has been initialized. You can now run your program at the directory."
       exit 0
+    end
+
+    def execute_bundle_gem opts
+      project_name = opts["init"]
+      `bundle gem #{project_name}`
+      # There is some custom files I rather have.
+      Dir.chdir project_name do
+        FileUtils.rm "README.md"
+
+        bootstrap_gemspec opts
+      end
     end
 
     def bootstrap_db_config opts
@@ -220,6 +234,24 @@ module MultiAR
       end
     end
 
+    def bootstrap_gemspec opts
+      project_name = opts["init"]
+      gemspec = "#{project_name}.gemspec"
+
+      lines = File.readlines gemspec
+      puts lines.inspect
+      raise "Generated gemspec was not as expected..." if lines[-1] != "end\n"
+      lines.insert -2, "  spec.add_runtime_dependency \"multi_ar\", \"~> #{::MultiAR::VERSION}\""
+      lines.insert -2, "  spec.add_development_dependency \"multi_ar_migrations\", \"~> #{::MultiAR::VERSION}\""
+
+      puts lines.inspect
+
+      File.open gemspec, "w" do |f|
+        f.puts lines
+      end
+    end
+
+    # TODO: this is deprecated and not in use
     def bootstrap_gemfile
 
       str = <<-EOS.gsub(/^ {6}/, "")
