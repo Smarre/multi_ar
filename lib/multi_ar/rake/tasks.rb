@@ -51,9 +51,7 @@ module Rake
     end
 
     class << self
-      attr_accessor :databases
       attr_accessor :environment
-      attr_accessor :common_migrations
     end
 
     # When called, this declares Rake tasks of MultiAR,
