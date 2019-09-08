@@ -55,6 +55,7 @@ module MultiAR
       @run_by_default = false
     end
 
+    # Default location of database configuration.
     DEFAULT_DB_CONFIG = "config/database.yaml"
 
     # @note Consumes ARGV, create copy of it if you need it for something.

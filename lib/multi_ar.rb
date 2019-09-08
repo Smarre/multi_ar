@@ -100,6 +100,7 @@ module MultiAR
       ActiveRecord::Tasks::DatabaseTasks.migrations_paths
     end
 
+    # Calculates path to migration dir for given database.
     def self.migration_dir_for database_name
       ActiveRecord::Tasks::DatabaseTasks.migrations_paths
     end
@@ -144,6 +145,9 @@ module MultiAR
       @rake.invoke_task task_name
     end
 
+    # @api private
+    #
+    # Returns internal databases array.
     def self.databases
       @@__databases
     end
