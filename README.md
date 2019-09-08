@@ -73,6 +73,17 @@ $ multi_ar -t db:new_migration[NewMigraine] -d my_database
 $ multi_ar -t db:migrate
 ```
 
+#### Utilizing a gem for migrations
+
+Migrations can also be run directly from a gem. Any gem that has a special configuration file `config/multi_ar_gem.yaml`,
+which contains following data:
+
+    migration_dir: db/migrate
+
+After the gem has been installed to target system, the migrations can be run with `multi_ar` executable:
+
+    multi_ar --gem YOUR_GEM --task db:migrate --databases "your_databases"
+
 ### With the API
 
 There is few different ways of using the API, by subclassing {MultiAR::MultiAR}, by using {MultiAR::MultiAR}
