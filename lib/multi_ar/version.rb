@@ -1,5 +1,5 @@
 
 module MultiAR
     # MultiAR’s current version.
-    VERSION = "6.0.0-rc"
+    VERSION = "6.0.0"
 end
